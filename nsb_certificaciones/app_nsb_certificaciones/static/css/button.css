@@ -11,7 +11,7 @@ button {
   font-size: 1em;
   border-radius: 500px;
   overflow: hidden;
-  background: #38caef;
+  background: rgb(40, 66, 101);
   color: ghostwhite;
   width: 100%;
  }

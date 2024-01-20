@@ -1,0 +1,5 @@
+.sombra-login {
+    -webkit-box-shadow: 3px 7px 52px 0px rgba(179,179,179,1);
+    -moz-box-shadow: 3px 7px 52px 0px rgba(179,179,179,1);
+    box-shadow: 3px 7px 52px 0px rgba(179,179,179,1);
+}
