@@ -24,4 +24,9 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.vistaLogin, name="login"),
+    path('registrarUsuario/',views.vistaRegistroUsario, name="registroUsario"),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static (settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
