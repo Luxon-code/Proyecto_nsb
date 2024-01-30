@@ -131,3 +131,13 @@ MEDIA_ROOT= os.path.join(BASE_DIR,'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'app_nsb_certificaciones.User'
+
+#recaptcha
+GOOGLE_RECAPTCHA_SECRET_KEY = '6Ld2Ud8mAAAAADRTJN0vMNK4ZYyCaBYQcByGF60g'
+
+#variables configuración correo
+EMAIL_HOST="smtp.gmail.com"
+EMAIL_PORT=587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER="jt9906157@gmail.com"
+EMAIL_HOST_PASSWORD='pkyj crmw mkma qbtz'

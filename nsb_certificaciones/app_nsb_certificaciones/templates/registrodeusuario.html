@@ -17,8 +17,7 @@
 <script src="https://code.jquery.com/jquery-3.6.4.js" 
     integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" 
     crossorigin="anonymous"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.rtl.min.css"/>
@@ -42,7 +41,7 @@
               <div class="d-flex justify-content-start">
                   <img src="{% static 'img/certificado.png'%}" alt="" style="position: absolute; top: -1.5rem; left: -2.5rem; height: 6rem; transform: rotate(-10deg);">
               </div>
-              <form action="/iniciarSesion/" method="post" id="formRegistro">
+              <form action="/registrarUsuario/" enctype="multipart/form-data" method="post" id="formRegistro">
                 {% csrf_token %}
                 <div class="row">
                    <h3 class="text-center">Registro de Usuario</h3>
@@ -123,7 +122,7 @@
                   </div>
                 </div>
                 <div class="row mt-4">
-                  <button> <span>Registrarse</span>
+                  <button class="button"> <span>Registrarse</span>
                   </button>
                 </div>
               </form>
@@ -191,6 +190,41 @@
     }
   });
 </script>
+{% if mensaje %}
+{% if estado %}
+  <script>
+    Swal.fire({
+      title: 'Registro de usuario',
+      text: '{{mensaje}}',
+      icon: 'success',               
+      confirmButtonColor: '#3085d6',             
+      confirmButtonText: 'Aceptar'
+  }).then((result) => {
+      if (result.isConfirmed) {
+         window.location.href = "/";
+      }
+  })
+</script>
+{% else %}
+<script>
+  Swal.fire({
+    title: 'Registro de usuario',
+    text: '{{mensaje}}',
+    icon: 'warning',               
+    confirmButtonColor: '#3085d6',            
+    confirmButtonText: 'Aceptar'
+}).then((result) => {
+    if (result.isConfirmed) {
+       txtNombres.value = "{{nombres}}";
+       txtApellidos.value = "{{apellidos}}";
+       txtCedula.value = "{{cedula}}";
+       txtTelefono.value = "{{telefono}}";
+       txtCorreo.value = "{{correo}}";
+    }
+})
+</script>
+{% endif %}
+{% endif %}
 </body>
 
 </html>

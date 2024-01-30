@@ -23,8 +23,12 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.vistaLogin, name="login"),
-    path('registrarUsuario/',views.vistaRegistroUsario, name="registroUsario"),
+    path('',views.vistaLogin),
+    path('vistaregistrarUsuario/',views.vistaRegistroUsario),
+    path('registrarUsuario/',views.registrarUsuario),
+    path('inicioUsuario/',views.vistaInicioUsuario),
+    path('inicioAdministrador/',views.vistaInicioAdministrador),
+    path('iniciarSesion/',views.iniciarSesion),
 ]
 
 
