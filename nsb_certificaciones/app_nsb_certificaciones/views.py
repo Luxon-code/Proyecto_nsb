@@ -48,7 +48,7 @@ def registrarUsuario(request):
         with transaction.atomic():
             # crear un objeto de tipo User
             user = User(username=correo, first_name=nombres,
-                        last_name=apellidos,userFoto=foto,userCedula=cedula,userTelefono=telefono)
+                        last_name=apellidos,userFoto=foto,userCedula=cedula,userTelefono=telefono,email=correo)
             user.save()
             
             user.set_password(contraseña)
