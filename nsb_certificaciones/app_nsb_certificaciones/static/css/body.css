@@ -6,3 +6,7 @@ body {
     background-attachment: fixed;
   }
 
+.bg-menu{
+  background-image: linear-gradient(to left, #4878a8, #406a97, #385c86, #304f75, #284265);
+}
+
