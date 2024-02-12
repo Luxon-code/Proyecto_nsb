@@ -45,12 +45,12 @@
         --bs-accordion-btn-icon-width: 1.25rem;
         --bs-accordion-btn-icon-transform: rotate(-180deg);
         --bs-accordion-btn-icon-transition: transform 0.2s ease-in-out;
-        --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3C!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--%3E%3Cpath fill='%2338caef' d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3E");
+        --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3C!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--%3E%3Cpath fill='%237da9d4' d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3E");
         --bs-accordion-btn-focus-border-color: none;
         --bs-accordion-btn-focus-box-shadow: none;
         --bs-accordion-body-padding-x: 1.25rem;
         --bs-accordion-body-padding-y: 1rem;
-        --bs-accordion-active-color: #38caef;
+        --bs-accordion-active-color: #7da9d4;
         --bs-accordion-active-bg: none; 
     }
 </style>
@@ -65,6 +65,8 @@
           <a class="fs-1 text-white" data-bs-toggle="offcanvas" href="#offcanvasExample" aria-controls="offcanvasExample"><i class="bi bi-list"></i></a>
           <div class="d-flex">
             <h2 class="mt-1 text-white">NSB</h2>
+            {% load static %}
+            <img src="{% static 'img/certificado.png'%}" alt="" style="width: 4rem;">
           </div>
         </div>
       </nav>
@@ -72,7 +74,7 @@
     
     <div class="offcanvas offcanvas-start bg-menu border-end border-white" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
       <div class="offcanvas-header pt-1">
-        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Menu</h5>
+        <h5 class="offcanvas-title text-white" id="offcanvasExampleLabel">Menu</h5>
         <a class="text-white fs-1" data-bs-dismiss="offcanvas" aria-label="Close"><i class="bi bi-list"></i></a>
       </div>
       <div class="offcanvas-body p-0">
@@ -86,7 +88,7 @@
               <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body p-0">
                   <div class="list-group list-group-flush">
-                    <a href="#" class="list-group-item list-group-item-action">A simple default list group item</a>
+                    <a href="#" class="list-group-item  item-menu ">A simple default list group item</a>
                   </div>
                 </div>
               </div>
@@ -98,7 +100,11 @@
                 </button>
               </h2>
               <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+                <div class="accordion-body p-0">
+                  <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item  item-menu ">A simple default list group item</a>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="accordion-item">
@@ -108,35 +114,59 @@
                 </button>
               </h2>
               <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                <div class="accordion-body p-0">
+                  <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item  item-menu ">A simple default list group item</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
       </div>
+      <hr class="m-0 text-white">
+      <div class="dropup mx-3 my-2">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+          <strong>mdo</strong>
+        </a>
+        <ul class="dropdown-menu bg-menu border border-white text-small shadow" data-popper-placement="top-start" style="display: none; position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(0px, -34px);">
+          <li><a class="dropdown-item item-menu border-white border-bottom" href="#">New project...</a></li>
+          <li><a class="dropdown-item item-menu border-white border-bottom" href="#">Settings</a></li>
+          <li><a class="dropdown-item item-menu border-white border-bottom mb-2" href="#">Perfil</a></li>
+          <li><a class="dropdown-item item-menu" href="#">Cerrar sesion</a></li>
+        </ul>
+      </div>
     </div>
   </div>
   <script>
-    document.querySelectorAll('.accordion-item').forEach(item => {
-      item.addEventListener('mouseover', event => {
-              const button = item.querySelector('.accordion-button.collapsed');
-              const divCollapse = item.querySelector('.accordion-collapse.collapse');
-              if (button) {
-                button.classList.remove('collapsed');
-                button.setAttribute('aria-expanded', 'true');
-                divCollapse.classList.add('show');
-              }
-      });
-  
-      item.addEventListener('mouseout', event => {
-              const button = item.querySelector('.accordion-button:not(.collapsed)');
-              const divCollapse = item.querySelector('.accordion-collapse.show');
-              if (button) {
-                  button.classList.add('collapsed');
-                  button.setAttribute('aria-expanded', 'false');
-                  divCollapse.classList.remove('show');
-              }
+    $(document).ready(function(){
+      $('.dropup').hover(function() {
+          $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
+      }, function() {
+          $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
       });
   });
+  $(document).ready(function(){
+    $('.accordion-item').hover(function() {
+        const button = $(this).find('.accordion-button.collapsed');
+        const divCollapse = $(this).find('.accordion-collapse.collapse');
+        if (button.length) {
+            button.removeClass('collapsed');
+            button.attr('aria-expanded', 'true');
+            divCollapse.stop(true, true).delay(200).slideDown(500);
+        }
+    });
+
+    $('.accordion-item').mouseleave(function() {
+        const button = $(this).find('.accordion-button:not(.collapsed)');
+        const divCollapse = $(this).find('.accordion-collapse.show');
+        if (button.length) {
+            button.addClass('collapsed');
+            button.attr('aria-expanded', 'false');
+            divCollapse.stop(true, true).delay(200).slideUp(500);
+        }
+    });
+});
   </script>
 </body>
 

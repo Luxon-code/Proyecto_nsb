@@ -7,3 +7,18 @@
 a{
     cursor: pointer;
 }
+
+.item-menu {
+    display: inline-block;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    /* "to left" / "to right" - affects initial color */
+    background: linear-gradient(to left, #4878a8 50%, #7da9d4 50%) right;
+    background-size: 200%;
+    transition: .5s ease-out;
+}
+.item-menu:hover {
+    background-position: left;
+    color: #284265;
+}
