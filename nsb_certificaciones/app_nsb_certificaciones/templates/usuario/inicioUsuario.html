@@ -53,6 +53,13 @@
         --bs-accordion-active-color: #7da9d4;
         --bs-accordion-active-bg: none; 
     }
+    .dropdown-menu {
+      display: none; 
+      position: absolute; 
+      inset: auto auto 0px 0px; 
+      margin: 0px;
+      transform: translate(0px, -34px);
+    }
 </style>
 </head>
 
@@ -126,14 +133,16 @@
       <hr class="m-0 text-white">
       <div class="dropup mx-3 my-2">
         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-          <strong>mdo</strong>
+          {% if usuario.userFoto %}
+            <img src="/media/{{usuario.userFoto}}" alt="" width="32" height="32" class="rounded-circle me-2">
+          {% else %}
+            <img src="{% static 'img/usuario.png' %}" alt="" width="32" height="32" class="rounded-circle me-2">
+          {% endif %}
+          <strong>{{usuario.first_name}} {{usuario.last_name}}</strong>
         </a>
-        <ul class="dropdown-menu bg-menu border border-white text-small shadow" data-popper-placement="top-start" style="display: none; position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(0px, -34px);">
-          <li><a class="dropdown-item item-menu border-white border-bottom" href="#">New project...</a></li>
-          <li><a class="dropdown-item item-menu border-white border-bottom" href="#">Settings</a></li>
+        <ul class="dropdown-menu bg-menu border border-white text-small shadow">
           <li><a class="dropdown-item item-menu border-white border-bottom mb-2" href="#">Perfil</a></li>
-          <li><a class="dropdown-item item-menu" href="#">Cerrar sesion</a></li>
+          <li><a class="dropdown-item item-menu" href="/cerrarSesion/">Cerrar sesion</a></li>
         </ul>
       </div>
     </div>
@@ -159,7 +168,7 @@
 
     $('.accordion-item').mouseleave(function() {
         const button = $(this).find('.accordion-button:not(.collapsed)');
-        const divCollapse = $(this).find('.accordion-collapse.show');
+        const divCollapse = $(this).find('.accordion-collapse');
         if (button.length) {
             button.addClass('collapsed');
             button.attr('aria-expanded', 'false');

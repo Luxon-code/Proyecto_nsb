@@ -18,7 +18,9 @@ def vistaRegistroUsario(request):
 
 def vistaInicioUsuario(request):
     if request.user.is_authenticated:
-        return render(request,'usuario/inicioUsuario.html')
+        return render(request,'usuario/inicioUsuario.html',{"usuario":request.user})
+    else:
+        return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
     
 def vistaInicioAdministrador(request):
     if request.user.is_authenticated:
@@ -112,3 +114,16 @@ def iniciarSesion(request):
         else:
             mensaje = "validar recapcha"
             return render(request, "login.html", {"mensaje": mensaje})
+        
+def cerrarSesion(request):
+    """
+    Cierra la sesión de un usuario en el sistema.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+
+    Returns:
+        HttpResponse: Una respuesta HTTP que redirige al usuario a la página de inicio de sesión.
+    """
+    auth.logout(request)
+    return render(request, "login.html", {"mensaje": "Sesion cerrada correctamente"})
