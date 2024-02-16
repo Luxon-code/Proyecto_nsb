@@ -2,10 +2,15 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 cargoEmpleado = [
-    ('Madre comunitaria','Madre comunitaria'),
-    ('Docente','Docente'),
-    ('Padre comunitario','Padre comunitario'),
-    ('Auxiliar administrativo','Auxiliar administrativo'),
+    ('MADRE COMUNITARIA','MADRE COMUNITARIA'),
+    ('PADRE COMUNITARIO','PADRE COMUNITARIO'),
+    ('PROFESIONAL EN SALUD Y NUTRICIÓN','PROFESIONAL EN SALUD Y NUTRICIÓN'),
+    ('PROFESIONAL PSICOSOCIAL','PROFESIONAL PSICOSOCIAL'),
+    ('AGENTE EDUCATIVO/DOCENTE','AGENTE EDUCATIVO/DOCENTE'),
+    ('AUXILIAR PEDAGÓGICO','AUXILIAR PEDAGÓGICO'),
+    ('MANIPULADOR DE ALIMENTOS','MANIPULADOR DE ALIMENTOS'),
+    ('AUXILIAR DE SERVICIOS GENERALES','AUXILIAR DE SERVICIOS GENERALES'),
+    ('COORDINADOR (A)','COORDINADOR (A)')
 ]
 
 class User(AbstractUser):

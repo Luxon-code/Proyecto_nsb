@@ -1,0 +1,22 @@
+.select {
+	cursor: pointer;
+	outline:0;
+	color: #535353;
+	font-size: 17px;
+	padding: 8px 10px;
+	width: 100%;
+	border-radius: 3px;
+	border: 1px solid #9b9b9b;
+	background-color: transparent;
+}
+.select:hover{
+	background-color: #ccd4df;
+	color: rgb(40, 66, 101);
+	border-color: #116399;
+}
+
+option:hover .select{
+    background-color: #ccd4df;
+	color: rgb(40, 66, 101);
+	border-color: #116399;
+}

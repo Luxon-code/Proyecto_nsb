@@ -18,7 +18,7 @@ def vistaRegistroUsario(request):
 
 def vistaInicioUsuario(request):
     if request.user.is_authenticated:
-        return render(request,'usuario/inicioUsuario.html',{"usuario":request.user})
+        return render(request,'usuario/inicioUsuario.html',{"usuario":request.user,"cargos":cargoEmpleado})
     else:
         return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
     
