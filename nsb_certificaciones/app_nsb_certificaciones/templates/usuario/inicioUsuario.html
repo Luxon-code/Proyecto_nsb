@@ -27,7 +27,7 @@
 
 <body>
   <div class="container-fluid">
-    <div class="row border-bottom border-white">
+    <div class="row border-bottom border-white sticky-top">
       <nav class="navbar navbar-expand-lg p-0" style="backdrop-filter: blur(10px);
       background-color: rgba(255, 255, 255, 0.1);">
         <div class="container-fluid">
@@ -55,11 +55,11 @@
               <div class="row">
                  <h3 class="text-center">Generar Certificado</h3>
               </div>
-              <div class="row">
-                <div class="col-md-6">
+              <div class="row d-flex align-items-center">
+                <div class="col-md-6 mb-3">
                   <div class="mt-3 col-lg-12">
                     <div class="form__group field">
-                        <input class="form__field" type="email" placeholder="Usuario" name="txtNombre" id="txtNombre" required>
+                        <input class="form__field" type="text" placeholder="Usuario" name="txtNombre" id="txtNombre" required>
                         <label for="name" class="form__label"> 
                             <i class="fa-solid fa-signature fa-fade" style="font-size: 1.5rem;"></i>
                             Nombre Completo
@@ -68,7 +68,7 @@
                   </div>
                   <div class="mt-3 col-lg-12">
                     <div class="form__group field">
-                        <input class="form__field" type="password" placeholder="Contraseña" name="txtCedula" id="txtCedula" required>
+                        <input class="form__field" type="number" placeholder="Contraseña" name="txtCedula" id="txtCedula" required>
                         <label for="name" class="form__label">
                             <i class="fa-solid fa-address-card fa-fade" style="font-size: 1.5rem;"></i>
                             Numero de Cedula
@@ -76,15 +76,40 @@
                     </div>
                   </div>
                   <div class="mt-3 col-lg-12">
-                    <select class="select">
+                    <select class="select" name="cbCargo" id="cbCargo" required>
                       <option value="">Seleccione un cargo</option>
                       {% for cargo in cargos  %}
                         <option value="{{cargo.0}}">{{cargo.0}}</option>
                       {% endfor %}
                     </select>
                   </div>
+                  <div class="mt-3 col-lg-12">
+                    <h5>Agregar fechas</h5>
+                  </div>
+                  <div class="mt-3 col-lg-12">
+                    <div class="form__group field">
+                        <input class="form__field" type="date" placeholder="Usuario" name="txtFechaInicio" id="txtFechaInicio" required>
+                        <label for="name" class="form__label"> 
+                            <i class="fa-solid fa-calendar-days fa-fade" style="font-size: 1.5rem;"></i>
+                            Fecha de Inicio
+                        </label>
+                    </div>
+                  </div>
+                  <div class="mt-3 col-lg-12">
+                    <div class="form__group field">
+                        <input class="form__field" type="date" placeholder="Usuario" name="txtFechaFinal" id="txtFechaFinal" required>
+                        <label for="name" class="form__label"> 
+                            <i class="fa-solid fa-calendar-days fa-fade" style="font-size: 1.5rem;"></i>
+                            Fecha de terminacion 
+                        </label>
+                    </div>
+                  </div>
+                  <div class="mt-3 col-lg-12">
+                    <button class="button" type="button"> <span>Agregar <i class="fa-solid fa-plus fa-beat"></i></span>
+                    </button>
+                  </div>
                 </div>
-                <div class="col-md-6 ms-auto bg-white">
+                <div class="col-md-6 bg-white text-black border border-dark-subtle" style="font-family: Arial;">
                   <div class="row d-flex align-items-center">
                     <div class="col-3 p-0">
                       <div class="d-flex justify-content-center">
@@ -92,13 +117,93 @@
                       </div>
                     </div>
                     <div class="col-9 text-black p-2">
-                      <p class="my-0" style="font-size: small; text-align: center; font-weight:500; font-family: Arial;opacity: 0.5;">CORPORACIÓN NUTRICIÓN SALUD Y BIENESTAR NSB DE COLOMBIA   
+                      <p class="my-0" style="font-size: small; text-align: center; font-weight:500;opacity: 0.5;">CORPORACIÓN NUTRICIÓN SALUD Y BIENESTAR NSB DE COLOMBIA   
                       </p>
                       <p class="m-0" style="font-size: xx-small; text-align: center;opacity: 0.5;">NIT 900.407.911-8</p>
                     </div>
                   </div>
                   <div class="row">
-                    <p></p>
+                    <p class="m-0" style="font-size: medium;text-align: center;">LA SUSCRITA REPRESENTANTE LEGAL</p>
+                  </div>
+                  <div class="row">
+                    <p class="my-3" style="font-size: medium;text-align: center;">CERTIFICA QUE</p>
+                  </div>
+                  <div class="row">
+                    <p class="mt-3 px-4 placeholder-glow" style="font-size: small;text-align: justify;">
+                      <span class="placeholder col-6 placeholder-sm" id="nombreCompleto" style="text-transform: uppercase; font-weight: 600;"></span> 
+                      Identificada con cedula de ciudadanía número <span class="placeholder col-3 placeholder-sm" style="font-weight: 600;" id="cedula"></span>,
+                      quien labora para la Corporación mediante contrato de Trabajo a Término Fijo, 
+                      inferior a un año relacionado a continuación:</p>
+                  </div>
+                  <div class="row d-flez justify-content-center">
+                    <table class="w-75 text-center table-bordered border-black">
+                      <thead>
+                        <tr>
+                          <th colspan="3">CONTRATO</th>
+                        </tr>
+                      </thead>
+                      <tbody style="font-size: small;">
+                        <tr>
+                          <td class="col-6">FECHA DE INICIO</td>
+                          <td class="col-6">FECHA DE TERMINACIÓN</td>
+                        </tr>
+                        <tr>
+                          <td>ENERO 25 DE 2016</td>
+                          <td>DICIEMBRE 31 DE 2016</td>
+                        </tr>
+                        <tr>
+                          <td>ENERO 25 DE 2016</td>
+                          <td>DICIEMBRE 31 DE 2016</td>
+                        </tr>
+                        <tr>
+                          <td>ENERO 25 DE 2016</td>
+                          <td>DICIEMBRE 31 DE 2016</td>
+                        </tr>
+                        <tr>
+                          <td>ENERO 25 DE 2016</td>
+                          <td>DICIEMBRE 31 DE 2016</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="row">
+                    <p class="mt-3 px-4 placeholder-glow" style="font-size: small;text-align: justify;">
+                      Desempeñándose en el cargo de: <span class="placeholder col-3 placeholder-sm" style="text-transform: uppercase; font-weight: 600;" id="cargo"></span>, 
+                      en el desarrollo de los Contratos de Aporte mencionados, 
+                      cuyo objeto es “Atender integralmente a la primera infancia De Cero a Siempre”, 
+                      de conformidad con las directrices, 
+                      lineamientos y estándares establecidos por el ICBF.
+                    </p>
+                  </div>
+                  <div class="row">
+                    <p class="px-4" style="font-size: small;text-align: justify;">
+                      Dado en Neiva a solicitud de la interesada, 
+                      a los (27) días del mes Octubre de dos mil Veintitrés  (2023).
+                    </p>
+                  </div>
+                  <div class="row">
+                    <p class="px-4" style="font-size: small;text-align: justify;">
+                      Atentamente,
+                    </p>
+                  </div>
+                  <div class="row" style="font-size: small;text-align: start;">
+                    <div class="col-4">
+                      <img src="{% static 'img/firma_representante_legal.jpg'%}" alt="Avatar" style="height: 4rem;">
+                    </div>
+                    <p class="m-0 px-4" style="font-weight: 600;">
+                      MARÍA NAYIBE FERIZ DE VEGA  
+                    </p>
+                    <span class="px-4">Representante Legal.</span>
+                  </div>
+                  <div class="row d-flex align-items-center">
+                    <div class="col-12 text-black p-2">
+                      <p class="my-0" style="font-size: xx-small; text-align: center;opacity: 0.5;">
+                        CALLE  4 No. 10-11 Barrio Altico  Neiva – Huila     
+                      </p>
+                      <p class="m-0" style="font-size: xx-small; text-align: center;opacity: 0.5;">
+                        Teléfono 8641144 / 3208033640
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
