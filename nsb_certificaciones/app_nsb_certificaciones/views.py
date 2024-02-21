@@ -1,8 +1,10 @@
 from django.shortcuts import render,redirect
 from app_nsb_certificaciones.models import *
 from django.contrib.auth.hashers import check_password
+from django.http import JsonResponse
 from django.conf import settings
 import requests
+import json
 from django.db import transaction
 from django.contrib import auth
 # Create your views here.
@@ -127,3 +129,22 @@ def cerrarSesion(request):
     """
     auth.logout(request)
     return render(request, "login.html", {"mensaje": "Sesion cerrada correctamente"})
+
+
+def generarCertificado(request):
+    if request.method == "POST":
+        estado = False
+        try:
+            with transaction.atomic():
+                nombreCompleto = request.POST.get('nombreCompleto')
+                cedula = request.POST.get('cedula')
+                cargo = request.POST.get('cargo')
+                fechas =json.loads(request.POST.get('fechas'))
+                mensaje="ok"
+                estado=True
+                print(fechas)
+        except Exception as error:
+            transaction.rollback()
+            mensaje = f"{error}"
+        retorno = {"estado": estado, "mensaje": mensaje}
+        return JsonResponse(retorno)

@@ -153,3 +153,65 @@ function borrarFecha(){
         }
     }
 }
+
+function actualizarFechaMinima() {
+    let fechaInicioInput = document.getElementById('txtFechaInicio');
+    let fechaFinalInput = document.getElementById('txtFechaFinal');
+    
+    // Si se ha seleccionado una fecha de inicio
+    if (fechaInicioInput.value) {
+        // Establecer la fecha mínima en el input de fecha final como la fecha de inicio seleccionada
+        fechaFinalInput.min = fechaInicioInput.value;
+        
+        // Si la fecha actual en el input de fecha final es menor que la fecha mínima, restablecerla
+        if (fechaFinalInput.value < fechaFinalInput.min) {
+            fechaFinalInput.value = fechaFinalInput.min;
+        }
+    } else {
+        // Si no se ha seleccionado una fecha de inicio, restablecer la fecha mínima en el input de fecha final
+        fechaFinalInput.min = "";
+    }
+}
+
+function generarCertificado(){
+    if(!$('#txtNombre').val()||!$('#txtCedula').val()||!$('#cbCargo').val()){
+        var data = new FormData();
+        data.append('nombreCompleto',$('#txtNombre').val())
+        data.append('cedula',$('#txtCedula').val())
+        data.append('cargo',$('#cbCargo').val())
+        data.append('fechas',JSON.stringify(fechas))
+        var options = {
+            method: "POST",
+            body:data,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            }
+        }
+        fetch("/generarCertificado/",options)
+        .then(response => response.json())
+        .then((data)=>{
+            console.log(data)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+    }else{
+        toastr.info('Por favor ingrese todos los datos')
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
