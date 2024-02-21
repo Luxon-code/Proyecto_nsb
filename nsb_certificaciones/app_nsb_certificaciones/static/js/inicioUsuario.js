@@ -87,8 +87,8 @@ function readFechas(){
         // Array para los nombres de los meses
         let meses = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
         // Formato de la fecha: MES DÍA DE AÑO
-        let formattedInicio = `${meses[fechaInicio.getMonth()]} ${fechaInicio.getDate()} DE ${fechaInicio.getFullYear()}`;
-        let formattedTerminacion = `${meses[fechaTerminacion.getMonth()]} ${fechaTerminacion.getDate()} DE ${fechaTerminacion.getFullYear()}`;
+        let formattedInicio = `${meses[fechaInicio.getUTCMonth()]} ${fechaInicio.getUTCDate()} DE ${fechaInicio.getUTCFullYear()}`;
+        let formattedTerminacion = `${meses[fechaTerminacion.getUTCMonth()]} ${fechaTerminacion.getUTCDate()} DE ${fechaTerminacion.getUTCFullYear()}`;
         row += `<tr>
             <td>${formattedInicio}</td>
             <td>${formattedTerminacion}</td>
@@ -174,27 +174,31 @@ function actualizarFechaMinima() {
 }
 
 function generarCertificado(){
-    if(!$('#txtNombre').val()||!$('#txtCedula').val()||!$('#cbCargo').val()){
-        var data = new FormData();
-        data.append('nombreCompleto',$('#txtNombre').val())
-        data.append('cedula',$('#txtCedula').val())
-        data.append('cargo',$('#cbCargo').val())
-        data.append('fechas',JSON.stringify(fechas))
-        var options = {
-            method: "POST",
-            body:data,
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
+    if($('#txtNombre').val()&&$('#txtCedula').val()&&$('#cbCargo').val()){
+        if(fechas.length!=0){
+            var data = new FormData();
+            data.append('nombreCompleto',$('#txtNombre').val())
+            data.append('cedula',$('#txtCedula').val())
+            data.append('cargo',$('#cbCargo').val())
+            data.append('fechas',JSON.stringify(fechas))
+            var options = {
+                method: "POST",
+                body:data,
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                }
             }
+            fetch("/generarCertificado/",options)
+            .then(response => response.json())
+            .then((data)=>{
+                console.log(data)
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+        }else{
+            toastr.info('Por favor agregue minimo una fecha')
         }
-        fetch("/generarCertificado/",options)
-        .then(response => response.json())
-        .then((data)=>{
-            console.log(data)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
     }else{
         toastr.info('Por favor ingrese todos los datos')
     }
