@@ -20,15 +20,21 @@ class User(AbstractUser):
         )
     userTelefono = models.CharField(max_length=20,db_comment="Numero de telefono del usuario")
     userFoto = models.FileField(upload_to=f"fotos/", null=True, blank=True,db_comment="Foto del Usuario")
-    userfechaHoraCreacion  = models.DateTimeField(auto_now_add=True,db_comment="Fecha y hora del registro")
-    userfechaHoraActualizacion = models.DateTimeField(auto_now=True,db_comment="Fecha y hora última actualización")
+    userFechaHoraCreacion  = models.DateTimeField(auto_now_add=True,db_comment="Fecha y hora del registro")
+    userFechaHoraActualizacion = models.DateTimeField(auto_now=True,db_comment="Fecha y hora última actualización")
     def _str_(self):
         return f"{self.username}"
     
+class FechasContrato(models.Model):
+    fecInicio = models.DateField()
+    fecTerminacion = models.DateField()
+    fecFechaHoraCreacion  = models.DateTimeField(auto_now_add=True,db_comment="Fecha y hora del registro")
+    fecFechaHoraActualizacion = models.DateTimeField(auto_now=True,db_comment="Fecha y hora última actualización")
 class Empleado(models.Model):
     empNombre = models.CharField(max_length=100,db_comment="Nombre del empleado")
     empCedula = models.CharField(max_length=20,db_comment="Numero de cedula del empleado")
     empCargo = models.CharField(max_length=100,choices=cargoEmpleado,db_comment="Cargo del empleado")
+    empFechasContrato = models.ForeignKey(FechasContrato,on_delete=models.CASCADE,db_comment="Fechas de los contratos que ha tenido el empleado")
     empFechaHoraCreacion  = models.DateTimeField(auto_now_add=True,db_comment="Fecha y hora del registro")
     empFechaHoraActualizacion = models.DateTimeField(auto_now=True,db_comment="Fecha y hora última actualización")   
 class Certificado(models.Model):

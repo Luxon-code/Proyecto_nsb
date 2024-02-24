@@ -142,7 +142,9 @@ def generarCertificado(request):
                 fechas =json.loads(request.POST.get('fechas'))
                 mensaje="ok"
                 estado=True
-                print(fechas)
+                for fecha in fechas:
+                    fechasContrato = FechasContrato(fecInicio=fecha[0],fecTerminacion=fecha[1])
+                    fechasContrato.save()
         except Exception as error:
             transaction.rollback()
             mensaje = f"{error}"

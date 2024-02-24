@@ -69,6 +69,7 @@ function guardarFechas(){
         fechaInicial.value = ""
         fechaFinal.value = ""
         readFechas()
+        fechaMinima()
     }else{
         toastr.info('Por favor ingrese ambas fechas.')
     }
@@ -152,6 +153,7 @@ function borrarFecha(){
             table.innerHTML = rows
         }
     }
+    fechaMinima()
 }
 
 function actualizarFechaMinima() {
@@ -170,6 +172,15 @@ function actualizarFechaMinima() {
     } else {
         // Si no se ha seleccionado una fecha de inicio, restablecer la fecha mínima en el input de fecha final
         fechaFinalInput.min = "";
+    }
+}
+
+function fechaMinima(){
+    let fechaInicial = document.getElementById('txtFechaInicio')
+    if(fechas.length==0){
+        fechaInicial.min = ""
+    }else{
+        fechaInicial.min = fechas[fechas.length-1][1]
     }
 }
 
