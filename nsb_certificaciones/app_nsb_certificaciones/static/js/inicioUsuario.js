@@ -98,10 +98,8 @@ function readFechas(){
     table.innerHTML=rowPrinpal+row
 }
 
-
-function borrarFecha(){
-    if(fechas.length == 0){
-        let table = document.getElementById('tablaFechas')
+function defaultTable(){
+    let table = document.getElementById('tablaFechas')
         let rows = `<tr>
         <td class="col-6">FECHA DE INICIO</td>
         <td class="col-6">FECHA DE TERMINACIÓN</td>
@@ -124,33 +122,16 @@ function borrarFecha(){
         </tr>
         `
         table.innerHTML = rows
+}
+
+function borrarFecha(){
+    if(fechas.length == 0){
+        defaultTable()
     }else{
         fechas.pop()
         readFechas()
         if(fechas.length == 0){
-            let table = document.getElementById('tablaFechas')
-            let rows = `<tr>
-            <td class="col-6">FECHA DE INICIO</td>
-            <td class="col-6">FECHA DE TERMINACIÓN</td>
-            </tr>
-            <tr>
-            <td><span class="placeholder col-10 placeholder-sm"></span> </td>
-            <td><span class="placeholder col-10 placeholder-sm"></span> </td>
-            </tr>
-            <tr>
-            <td><span class="placeholder col-10 placeholder-sm"></span> </td>
-            <td><span class="placeholder col-10 placeholder-sm"></span> </td>
-            </tr>
-            <tr>
-            <td><span class="placeholder col-10 placeholder-sm"></span> </td>
-            <td><span class="placeholder col-10 placeholder-sm"></span> </td>
-            </tr>
-            <tr>
-            <td><span class="placeholder col-10 placeholder-sm"></span> </td>
-            <td><span class="placeholder col-10 placeholder-sm"></span> </td>
-            </tr>
-            `
-            table.innerHTML = rows
+            defaultTable()
         }
     }
     fechaMinima()
@@ -202,7 +183,20 @@ function generarCertificado(){
             fetch("/generarCertificado/",options)
             .then(response => response.json())
             .then((data)=>{
-                console.log(data)
+                if(data.estado){
+                    txtNombre.value = ""
+                    cbCargo.value= ""
+                    txtCedula.value= ""
+                    defaultTable()
+                    fechas.length = 0
+                    fechaMinima()
+                    $('#nombreCompleto').addClass('placeholder col-6 placeholder-sm')
+                    $('#nombreCompleto').text('')
+                    $('#cedula').addClass('placeholder col-3 placeholder-sm')
+                    $('#cedula').text('')
+                    $('#cargo').addClass('placeholder col-3 placeholder-sm')
+                    $('#cargo').text('')
+                }
             })
             .catch((error)=>{
                 console.log(error)

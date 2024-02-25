@@ -139,12 +139,15 @@ def generarCertificado(request):
                 nombreCompleto = request.POST.get('nombreCompleto')
                 cedula = request.POST.get('cedula')
                 cargo = request.POST.get('cargo')
-                fechas =json.loads(request.POST.get('fechas'))
+                fechas =request.POST.get('fechas')
+                empleado = Empleado(empNombre=nombreCompleto,empCedula=cedula,empCargo=cargo,
+                                    empFechas=fechas)
+                empleado.save()
+                certificado = Certificado(cerNombre=f"{cedula}_{nombreCompleto}",cerEmpleado=empleado,
+                                          cerUser=request.user)
+                certificado.save()
                 mensaje="ok"
                 estado=True
-                for fecha in fechas:
-                    fechasContrato = FechasContrato(fecInicio=fecha[0],fecTerminacion=fecha[1])
-                    fechasContrato.save()
         except Exception as error:
             transaction.rollback()
             mensaje = f"{error}"
