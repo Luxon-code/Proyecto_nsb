@@ -4,9 +4,11 @@ from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 from django.conf import settings
 import requests
-import json
+from nlt import numlet as nl
+import os
 from django.db import transaction
 from django.contrib import auth
+import datetime
 # Create your views here.
 
 
@@ -20,7 +22,7 @@ def vistaRegistroUsario(request):
 
 def vistaInicioUsuario(request):
     if request.user.is_authenticated:
-        return render(request,'usuario/inicioUsuario.html',{"usuario":request.user,"cargos":cargoEmpleado})
+        return render(request,'usuario/inicioUsuario.html',{"usuario":request.user,"cargos":cargoEmpleado,"fechaActual":fecha_actual()})
     else:
         return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
     
@@ -30,6 +32,14 @@ def vistaInicioAdministrador(request):
 
 
 #------------------------funciones------------------------#
+def fecha_actual():
+    meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    ahora = datetime.datetime.now()
+    dia = ahora.day
+    mes = meses[ahora.month - 1]
+    año = ahora.year
+    año_letras = nl.Numero(año).a_letras.lower()
+    return f"Dado en Neiva a solicitud de la interesada,a los ({dia}) días del mes {mes} de {año_letras}  ({año})."
 
 def registrarUsuario(request):
     """
@@ -146,6 +156,7 @@ def generarCertificado(request):
                 certificado = Certificado(cerNombre=f"{cedula}_{nombreCompleto}",cerEmpleado=empleado,
                                           cerUser=request.user)
                 certificado.save()
+                pdfCertificado(empleado,certificado)
                 mensaje="ok"
                 estado=True
         except Exception as error:
@@ -153,3 +164,32 @@ def generarCertificado(request):
             mensaje = f"{error}"
         retorno = {"estado": estado, "mensaje": mensaje}
         return JsonResponse(retorno)
+    
+def pdfCertificado(empleado:Empleado,certificado:Certificado):
+    eliminar_archivos_pdf()
+    from app_nsb_certificaciones.certificadoPdf import CertificadoPdf
+    pdf = CertificadoPdf()
+    
+    pdf.add_page()
+    
+    pdf.mostrarDatos(empleado)
+    
+    pdf.output(f'media/{certificado.cerNombre}.pdf', 'F')
+    
+    return f'media/{certificado.cerNombre}.pdf'
+
+def eliminar_archivos_pdf():
+    directorio_media = 'media'  # Reemplaza 'ruta/a/la/carpeta/media' con la ruta real a tu carpeta media
+
+    # Recorre todos los archivos en la carpeta media
+    for nombre_archivo in os.listdir(directorio_media):
+        # Verifica si el archivo es un archivo PDF
+        if nombre_archivo.endswith('.pdf'):
+            # Construye la ruta completa al archivo
+            ruta_archivo = os.path.join(directorio_media, nombre_archivo)
+            try:
+                # Intenta eliminar el archivo
+                os.remove(ruta_archivo)
+                print(f"Archivo eliminado: {ruta_archivo}")
+            except Exception as e:
+                print(f"No se pudo eliminar el archivo {ruta_archivo}: {e}")
