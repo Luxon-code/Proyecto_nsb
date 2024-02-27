@@ -14,12 +14,11 @@ def formatearFechas(fecha):
     
 class CertificadoPdf(FPDF):
     def header(self):
-        with self.local_context(fill_opacity=0.25):
+        with self.local_context(fill_opacity=0.5):
             # Logo
             self.image('media/nsb_logo.jpg', 10, 8, 20)
             # Arial bold 13
             self.set_font('Arial', 'B', 13)
-            self.ln()
             # Move to the right
             self.cell(60)
             # Title
@@ -32,7 +31,7 @@ class CertificadoPdf(FPDF):
             self.ln(20)
         
     def footer(self):
-        with self.local_context(fill_opacity=0.25):
+        with self.local_context(fill_opacity=0.5):
             # Pie de página del PDF
             self.set_y(-15)
             self.set_font('Arial', '', 8)
@@ -52,7 +51,7 @@ class CertificadoPdf(FPDF):
         f"**{empleado.empCedula}**, quien viene laborando para la Corporación mediante "
         f"contrato de Trabajo a Término Fijo, inferior a un año relacionado a continuación:")
         self.multi_cell(0,10,text,markdown=True,align="J",max_line_height=5,padding=5)
-        self.ln()
+        self.ln(0.2)
         #tabla
         ancho_pagina = self.w
         # Ancho de la tabla
@@ -72,20 +71,21 @@ class CertificadoPdf(FPDF):
             self.set_x(x_inicial)
             self.cell(75, 10,formatearFechas(fecha[0]), 1, 0, "C")
             self.cell(75, 10,formatearFechas(fecha[1]), 1, 1, "C")
-        self.ln()
+        self.ln(2)
         self.set_font('Arial','',12)
         text = f'Desempeñándose en el cargo de: **{empleado.empCargo}**, en el desarrollo de los Contratos de Aporte mencionados, cuyo objeto es "Atender integralmente a la primera infancia De Cero a Siempre", de conformidad con las directrices, lineamientos y estándares establecidos por el ICBF.'
         self.multi_cell(0,10,text,markdown=True,align="J",max_line_height=5,padding=5)
-        self.ln()
+        self.ln(0.2)
         self.multi_cell(0,10,fecha_actual(),markdown=True,align="J",max_line_height=5,padding=5)
-        self.ln()
+        self.ln(0.2)
         self.cell(5)
         self.cell(0,10,"Atentamente,",0,1,align="L")
         self.image('media/firma_representante_legal.jpg',x='L',w=80)
         self.set_font('Arial','B',12)
         self.cell(5)
-        self.cell(0,10,"MARÍA NAYIBE FERIZ DE VEGA",0,1,align="L")
+        self.cell(0,10,"MARÍA NAYIBE FERIZ DE VEGA",0,0,align="L")
+        self.ln(4)
         self.set_font('Arial','',12)
         self.cell(5)
-        self.cell(0,10,"Representante Legal.",0,1,align="L")
+        self.cell(0,10,"Representante Legal.",0,0,align="L")
         

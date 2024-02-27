@@ -183,21 +183,31 @@ function generarCertificado(){
             fetch("/generarCertificado/",options)
             .then(response => response.json())
             .then((data)=>{
-                console.log(data)
-                if(data.estado){
-                    txtNombre.value = ""
-                    cbCargo.value= ""
-                    txtCedula.value= ""
-                    defaultTable()
-                    fechas.length = 0
-                    fechaMinima()
-                    $('#nombreCompleto').addClass('placeholder col-6 placeholder-sm')
-                    $('#nombreCompleto').text('')
-                    $('#cedula').addClass('placeholder col-3 placeholder-sm')
-                    $('#cedula').text('')
-                    $('#cargo').addClass('placeholder col-3 placeholder-sm')
-                    $('#cargo').text('')
-                }
+                let loader = document.getElementById('loader')
+                loader.innerHTML = `<div class="blur-background"></div>
+                <div class="loader-container">
+                  <span class="loader"></span>
+                </div>`
+                setTimeout(function() {
+                    console.log(data)
+                    if(data.estado){
+                        txtNombre.value = ""
+                        cbCargo.value= ""
+                        txtCedula.value= ""
+                        defaultTable()
+                        fechas.length = 0
+                        fechaMinima()
+                        $('#nombreCompleto').addClass('placeholder col-6 placeholder-sm')
+                        $('#nombreCompleto').text('')
+                        $('#cedula').addClass('placeholder col-3 placeholder-sm')
+                        $('#cedula').text('')
+                        $('#cargo').addClass('placeholder col-3 placeholder-sm')
+                        $('#cargo').text('')
+                        loader.innerHTML = ""
+                        descargarPDF(data.url,data.nombreDelArchivo)
+                        toastr.success(data.mensaje)
+                    }
+                }, 3000);                
             })
             .catch((error)=>{
                 console.log(error)
@@ -225,3 +235,27 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+function descargarPDF(url,nombreDelArchivo) {
+    // Nombre del archivo PDF a descargar
+    var nombreArchivo = nombreDelArchivo;
+    
+    // URL del archivo PDF
+    var urlArchivo = url; // Cambia esto con la ruta a tu archivo PDF
+  
+    // Crear un elemento <a> para el enlace de descarga
+    var enlaceDescarga = document.createElement('a');
+  
+    // Configurar el enlace de descarga
+    enlaceDescarga.href = urlArchivo;
+    enlaceDescarga.download = nombreArchivo;
+  
+    // Agregar el enlace de descarga al documento y simular el clic
+    document.body.appendChild(enlaceDescarga);
+    enlaceDescarga.click();
+  
+    // Eliminar el enlace de descarga del documento
+    document.body.removeChild(enlaceDescarga);
+  }
+
+  

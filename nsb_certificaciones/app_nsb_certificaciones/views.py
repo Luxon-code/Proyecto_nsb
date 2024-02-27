@@ -156,16 +156,18 @@ def generarCertificado(request):
                 certificado = Certificado(cerNombre=f"{cedula}_{nombreCompleto}",cerEmpleado=empleado,
                                           cerUser=request.user)
                 certificado.save()
-                pdfCertificado(empleado,certificado)
-                mensaje="ok"
+                url = pdfCertificado(empleado,certificado)
+                nombreDelArchivo=certificado.cerNombre
+                mensaje="Certificado Generado"
                 estado=True
+                retorno = {"estado": estado, "mensaje": mensaje,"url":'/'+url,"nombreDelArhivo":nombreDelArchivo}
         except Exception as error:
             transaction.rollback()
             mensaje = f"{error}"
-        retorno = {"estado": estado, "mensaje": mensaje}
+            retorno = {"estado": estado, "mensaje": mensaje}
         return JsonResponse(retorno)
     
-def pdfCertificado(empleado:Empleado,certificado:Certificado):
+def pdfCertificado(empleado: Empleado, certificado: Certificado):
     eliminar_archivos_pdf()
     from app_nsb_certificaciones.certificadoPdf import CertificadoPdf
     pdf = CertificadoPdf()
@@ -174,9 +176,9 @@ def pdfCertificado(empleado:Empleado,certificado:Certificado):
     
     pdf.mostrarDatos(empleado)
     
-    pdf.output(f'media/{certificado.cerNombre}.pdf', 'F')
-    
-    return f'media/{certificado.cerNombre}.pdf'
+    pdf_output_path = f'media/{certificado.cerNombre}.pdf'
+    pdf.output(pdf_output_path, 'F')
+    return pdf_output_path
 
 def eliminar_archivos_pdf():
     directorio_media = 'media'  # Reemplaza 'ruta/a/la/carpeta/media' con la ruta real a tu carpeta media

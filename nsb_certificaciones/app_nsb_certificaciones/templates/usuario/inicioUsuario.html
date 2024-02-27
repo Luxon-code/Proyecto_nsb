@@ -17,6 +17,7 @@
     integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" 
     crossorigin="anonymous"></script>
 {% load static%}
+<link rel="stylesheet" href="{% static 'css/loader.css' %}">
 <link rel="stylesheet" href="{% static 'css/body.css' %}">
 <link rel="stylesheet" href="{% static 'css/input.css' %}">
 <link rel="stylesheet" href="{% static 'css/checkbox.css' %}">
@@ -25,6 +26,7 @@
 <link rel="stylesheet" href="{% static 'css/select.css' %}">
 <link rel="stylesheet" href="{% static 'css/toastr.min.css' %}">
 <script src="{% static 'js/toastr.min.js'%}"></script>
+<script src="{% static 'js/loader.js'%}"></script>
 </head>
 
 <body>
@@ -42,8 +44,9 @@
         </div>
       </nav>
     </div>
-
-
+    <div id="loader">
+      
+    </div>
     <div class="row">
       <div class="col-sm-12">
         <div class="d-flex justify-content-center align-items-center h-100" style="margin-top:0.7rem; margin-bottom: 0.7rem;">

@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.rtl.min.css"/>
 {% load static%}
+<link rel="stylesheet" href="{% static 'css/loader.css' %}">
 <link rel="stylesheet" href="{% static 'css/body.css' %}">
 <link rel="stylesheet" href="{% static 'css/input.css' %}">
 <link rel="stylesheet" href="{% static 'css/checkbox.css' %}">
@@ -29,9 +30,13 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/toastr.min.css' %}">
 <script src="{% static 'js/toastr.min.js'%}"></script>
+<script src="{% static 'js/loader.js'%}"></script>
 </head>
 
 <body>
+    <div id="loader">
+      
+    </div>
   <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
