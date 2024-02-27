@@ -257,5 +257,3 @@ function descargarPDF(url,nombreDelArchivo) {
     // Eliminar el enlace de descarga del documento
     document.body.removeChild(enlaceDescarga);
   }
-
-  

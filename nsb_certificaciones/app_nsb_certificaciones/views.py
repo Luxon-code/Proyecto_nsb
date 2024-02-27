@@ -195,3 +195,12 @@ def eliminar_archivos_pdf():
                 print(f"Archivo eliminado: {ruta_archivo}")
             except Exception as e:
                 print(f"No se pudo eliminar el archivo {ruta_archivo}: {e}")
+                
+def obtenerEmpleados(request):
+    try:
+        retorno = {
+            "empleados":list(Empleado.objects.all().values())
+        }
+        return JsonResponse(retorno)
+    except Exception as e:
+        print("Error: "+e)
