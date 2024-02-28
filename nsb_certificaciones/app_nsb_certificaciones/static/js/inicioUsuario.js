@@ -60,6 +60,8 @@ $(document).ready(function(){
 });
 
 let fechas = []
+let existeEmpleado = false
+let idEmpleado = ""
 
 function guardarFechas(){
     fechaInicial = document.getElementById('txtFechaInicio')
@@ -257,3 +259,22 @@ function descargarPDF(url,nombreDelArchivo) {
     // Eliminar el enlace de descarga del documento
     document.body.removeChild(enlaceDescarga);
   }
+
+function empleadoSeleccionado(element) {
+    existeEmpleado = true;
+    idEmpleado = element.id;
+    document.getElementById("listProyectos").innerHTML = "";
+    document.getElementById("listProyectos").style  = ``;
+    console.log(element)
+    fechas = JSON.parse(element.empFechas)
+    readFechas()
+    txtNombre.value = element.empNombre
+    txtCedula.value = element.empCedula
+    cbCargo.value = element.empCargo
+    $('#nombreCompleto').removeClass()
+    $('#nombreCompleto').text(element.empNombre)
+    $('#cedula').removeClass()
+    $('#cedula').text(element.empCedula)
+    $('#cargo').removeClass()
+    $('#cargo').text(element.empCargo)
+}
