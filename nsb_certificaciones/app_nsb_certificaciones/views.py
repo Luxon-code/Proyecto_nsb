@@ -150,20 +150,37 @@ def generarCertificado(request):
                 cedula = request.POST.get('cedula')
                 cargo = request.POST.get('cargo')
                 fechas =request.POST.get('fechas')
-                empleado = Empleado(empNombre=nombreCompleto,empCedula=cedula,empCargo=cargo,
-                                    empFechas=fechas)
-                empleado.save()
-                certificado = Certificado(cerNombre=f"{cedula}_{nombreCompleto}",cerEmpleado=empleado,
-                                          cerUser=request.user)
-                certificado.save()
-                url = pdfCertificado(empleado,certificado)
-                nombreDelArchivo=certificado.cerNombre
-                mensaje="Certificado Generado"
-                estado=True
+                existeEmpleado = request.POST.get('existeEmpleado')
+                idEmpleado = request.POST.get('idEmpleado')
+                if existeEmpleado=="true":
+                    empleado = Empleado.objects.get(pk=idEmpleado)
+                    empleado.empNombre = nombreCompleto
+                    empleado.empCedula = cedula
+                    empleado.empCargo = cargo
+                    empleado.empFechas = fechas
+                    empleado.save()
+                    certificado = Certificado.objects.filter(cerEmpleado=empleado).get()
+                    url = pdfCertificado(empleado,certificado)
+                    nombreDelArchivo=certificado.cerNombre
+                    mensaje="Certificado Generado"
+                    estado=True
+                else:
+                    empleado = Empleado(empNombre=nombreCompleto,empCedula=cedula,empCargo=cargo,
+                                        empFechas=fechas)
+                    empleado.save()
+                    certificado = Certificado(cerNombre=f"{cedula}_{nombreCompleto}",cerEmpleado=empleado,
+                                            cerUser=request.user)
+                    certificado.save()
+                    url = pdfCertificado(empleado,certificado)
+                    nombreDelArchivo=certificado.cerNombre
+                    mensaje="Certificado Generado"
+                    estado=True
                 retorno = {"estado": estado, "mensaje": mensaje,"url":'/'+url,"nombreDelArhivo":nombreDelArchivo}
         except Exception as error:
             transaction.rollback()
             mensaje = f"{error}"
+            if 'empleado.empCedula' in str(error):
+                mensaje = "ya existe un empleado con esta cedula"
             retorno = {"estado": estado, "mensaje": mensaje}
         return JsonResponse(retorno)
     

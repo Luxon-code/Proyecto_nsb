@@ -175,6 +175,8 @@ function generarCertificado(){
             data.append('cedula',$('#txtCedula').val())
             data.append('cargo',$('#cbCargo').val())
             data.append('fechas',JSON.stringify(fechas))
+            data.append('existeEmpleado',existeEmpleado)
+            data.append('idEmpleado',idEmpleado)
             var options = {
                 method: "POST",
                 body:data,
@@ -186,28 +188,17 @@ function generarCertificado(){
             .then(response => response.json())
             .then((data)=>{
                 let loader = document.getElementById('loader')
-                loader.innerHTML = `<div class="blur-background"></div>
-                <div class="loader-container">
-                  <span class="loader"></span>
-                </div>`
+                loader.style.display = "block";
                 setTimeout(function() {
                     console.log(data)
                     if(data.estado){
-                        txtNombre.value = ""
-                        cbCargo.value= ""
-                        txtCedula.value= ""
-                        defaultTable()
-                        fechas.length = 0
-                        fechaMinima()
-                        $('#nombreCompleto').addClass('placeholder col-6 placeholder-sm')
-                        $('#nombreCompleto').text('')
-                        $('#cedula').addClass('placeholder col-3 placeholder-sm')
-                        $('#cedula').text('')
-                        $('#cargo').addClass('placeholder col-3 placeholder-sm')
-                        $('#cargo').text('')
-                        loader.innerHTML = ""
+                        limpiarFormulario()
+                        loader.style.display = "none";
                         descargarPDF(data.url,data.nombreDelArchivo)
                         toastr.success(data.mensaje)
+                    }else{
+                        loader.style.display = "none";
+                        toastr.warning(data.mensaje)
                     }
                 }, 3000);                
             })
@@ -277,4 +268,33 @@ function empleadoSeleccionado(element) {
     $('#cedula').text(element.empCedula)
     $('#cargo').removeClass()
     $('#cargo').text(element.empCargo)
+    txtNombre.disabled = true
+    txtCedula.disabled = true
+    cbCargo.disabled = true
+    fechaMinima()
+    block_impiar.innerHTML = `<div class="col-lg-10">
+    <button class="button" onclick="limpiarFormulario()" type="button"> <span>limpiar formalario <i class="fa-solid fa-eraser fa-beat"></i></span>
+    </button>
+  </div>`
+}
+
+function limpiarFormulario(){
+    existeEmpleado = false;
+    idEmpleado = null;
+    fechas = []
+    defaultTable()
+    txtNombre.value = ''
+    txtCedula.value = ''
+    cbCargo.value = ''
+    $('#nombreCompleto').addClass('placeholder col-6 placeholder-sm')
+    $('#nombreCompleto').text('')
+    $('#cedula').addClass('placeholder col-3 placeholder-sm')
+    $('#cedula').text('')
+    $('#cargo').addClass('placeholder col-3 placeholder-sm')
+    $('#cargo').text('')
+    txtNombre.disabled = false
+    txtCedula.disabled = false
+    cbCargo.disabled = false
+    fechaMinima()
+    block_impiar.innerHTML = ``
 }
