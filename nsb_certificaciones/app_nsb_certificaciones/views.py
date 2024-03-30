@@ -29,6 +29,12 @@ def vistaInicioUsuario(request):
 def vistaInicioAdministrador(request):
     if request.user.is_authenticated:
         return render(request,'administrador/inicioAdministrador.html')
+    
+def vistaActulizarPefil(request):
+    if request.user.is_authenticated:
+        return render(request,'usuario/actualizarPerfil.html',{"usuario":request.user})
+    else:
+        return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
 
 
 #------------------------funciones------------------------#
@@ -221,3 +227,50 @@ def obtenerEmpleados(request):
         return JsonResponse(retorno)
     except Exception as e:
         print("Error: "+e)
+        
+def actualizarPerfil(request,id):
+    """
+    Modifica los datos de un usuario en su perfil y guarda los cambios en la base de datos.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        id (int): El ID del usuario cuyos datos se desean modificar.
+
+    Returns:
+        HttpResponse: Una respuesta HTTP que redirige al perfil del usuario con un mensaje de éxito o error.
+    """
+    if request.method == "POST":
+        try:
+            cedula = request.POST["txtCedula"]
+            nombres = request.POST["txtNombres"]
+            apellidos = request.POST["txtApellidos"]
+            correo = request.POST["txtCorreo"]
+            telefono = request.POST["txtTelefono"]
+            foto = request.FILES.get("fileFoto", False)
+            with transaction.atomic():
+                user = User.objects.get(pk=id)
+                user.username=correo
+                user.first_name=nombres
+                user.last_name=apellidos
+                user.email=correo
+                user.userCedula=cedula
+                user.userTelefono=telefono
+                if(foto):
+                    if user.userFoto == "":
+                        user.userFoto=foto
+                    else:
+                        os.remove('./media/'+str(user.userFoto))
+                        user.userFoto=foto
+                user.save()
+                mensaje = "Datos Modificados Correctamente"
+                retorno = {"mensaje": mensaje,"estado":True}
+        except Exception as error:
+            transaction.rollback()
+            if 'userCedula' in str(error):
+                mensaje = "Ya existe un usuario con esta cedula"
+            elif 'user.username' in str(error):
+                mensaje = "Ya existe un usuario con este correo electronico"
+            else:
+                mensaje = error
+            retorno = {"mensaje":mensaje,"estado":False}
+        return render(request, 'usuario/actualizarPerfil.html',retorno)
