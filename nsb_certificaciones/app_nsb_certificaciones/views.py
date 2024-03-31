@@ -36,7 +36,13 @@ def vistaActulizarPefil(request):
     else:
         return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
 
-
+def vistaHistorialCertificaciones(request):
+    if request.user.is_authenticated:
+        return render(request,'usuario/historialDeCertificaciones.html',{"usuario":request.user,
+                                                                         "certificaciones":Certificado.objects.all()})
+    else:
+        return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
+    
 #------------------------funciones------------------------#
 def fecha_actual():
     meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
@@ -166,6 +172,8 @@ def generarCertificado(request):
                     empleado.empFechas = fechas
                     empleado.save()
                     certificado = Certificado.objects.filter(cerEmpleado=empleado).get()
+                    certificado.cerCantidadGenerada += 1
+                    certificado.save() 
                     url = pdfCertificado(empleado,certificado)
                     nombreDelArchivo=certificado.cerNombre
                     mensaje="Certificado Generado"
@@ -175,7 +183,7 @@ def generarCertificado(request):
                                         empFechas=fechas)
                     empleado.save()
                     certificado = Certificado(cerNombre=f"{cedula}_{nombreCompleto}",cerEmpleado=empleado,
-                                            cerUser=request.user)
+                                            cerUser=request.user,cerCantidadGenerada=1)
                     certificado.save()
                     url = pdfCertificado(empleado,certificado)
                     nombreDelArchivo=certificado.cerNombre

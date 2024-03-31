@@ -47,5 +47,6 @@ class Certificado(models.Model):
     cerNombre = models.CharField(max_length=100,db_comment="Nombre del certificado")
     cerEmpleado = models.ForeignKey(Empleado, on_delete=models.CASCADE,db_comment="Empleado al que pertenece el certificado")
     cerUser = models.ForeignKey(User, on_delete=models.CASCADE,db_comment="Usuario que crea el certificado")
+    cerCantidadGenerada = models.BigIntegerField(db_comment="Cantidad de veces que se ha generado este certificado")
     cerFechaHoraCreacion  = models.DateTimeField(auto_now_add=True,db_comment="Fecha y hora del registro")
     cerFechaHoraActualizacion = models.DateTimeField(auto_now=True,db_comment="Fecha y hora última actualización")
