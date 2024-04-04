@@ -158,21 +158,28 @@ def generarCertificado(request):
         estado = False
         try:
             with transaction.atomic():
-                nombreCompleto = request.POST.get('nombreCompleto')
-                cedula = request.POST.get('cedula')
-                cargo = request.POST.get('cargo')
-                fechas =request.POST.get('fechas')
+                nombreCompleto = request.POST.get('nombreCompleto',False)
+                cedula = request.POST.get('cedula',False)
+                cargo = request.POST.get('cargo',False)
+                fechas =request.POST.get('fechas',False)
                 existeEmpleado = request.POST.get('existeEmpleado')
                 idEmpleado = request.POST.get('idEmpleado')
-                if existeEmpleado=="true":
+                if existeEmpleado=="true" and nombreCompleto==False:
                     empleado = Empleado.objects.get(pk=idEmpleado)
-                    empleado.empNombre = nombreCompleto
-                    empleado.empCedula = cedula
-                    empleado.empCargo = cargo
+                    certificado = Certificado.objects.filter(cerEmpleado=empleado).get()
+                    certificado.cerCantidadGenerada += 1
+                    certificado.save()
+                    url = pdfCertificado(empleado,certificado)
+                    nombreDelArchivo=certificado.cerNombre
+                    mensaje="Certificado Generado"
+                    estado=True 
+                elif existeEmpleado=="true":
+                    empleado = Empleado.objects.get(pk=idEmpleado)
                     empleado.empFechas = fechas
                     empleado.save()
                     certificado = Certificado.objects.filter(cerEmpleado=empleado).get()
                     certificado.cerCantidadGenerada += 1
+                    certificado.cerUser = request.user
                     certificado.save() 
                     url = pdfCertificado(empleado,certificado)
                     nombreDelArchivo=certificado.cerNombre

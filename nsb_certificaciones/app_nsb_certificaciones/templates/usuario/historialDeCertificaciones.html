@@ -32,6 +32,7 @@
 <script src="{% static 'js/toastr.min.js'%}"></script>
 <script src="{% static 'js/loader.js'%}"></script>
 <script src="{% static 'js/navar.js'%}"></script>
+<script src="{% static 'js/historial.js'%}"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
@@ -73,76 +74,84 @@
                 <div class="row">
                     <h3 class="text-center">Historial De Certificaciones</h3>
                  </div>
-                <table id="certificaciones" class="table border-primary table-hover">
+                <div class="table-responsive">
+                  <table id="certificaciones" class="table border-primary table-hover">
                     <thead>
                       <tr>
-                        <th scope="col">Empleado</th>
-                        <th scope="col">Cantidad de certificados generados</th>
-                        <th scope="col">Persona que genero el certificado</th>
-                        <th scope="col">Opcion</th>
+                        <th class="text-center" scope="col">Empleado</th>
+                        <th class="text-center" scope="col">Cargo</th>
+                        <th class="text-center" scope="col">Cantidad de certificados generados</th>
+                        <th class="text-center" scope="col">Persona que genero el certificado</th>
+                        <th class="text-center" scope="col">Opcion</th>
                       </tr>
                     </thead>
                     <tbody>
                      {% for certificado in certificaciones %}
                      <tr>
-                        <td>{{certificado.cerNombre}}</td>
-                        <td>{{certificado.cerCantidadGenerada}}</td>
-                        <td>{{certificado.cerUser.first_name}} {{certificado.cerUser.last_name}}</td>
-                        <td>algo</td>
+                        <td class="text-center">{{certificado.cerNombre}}</td>
+                        <td class="text-center">{{certificado.cerEmpleado.empCargo}}</td>
+                        <td class="text-center">{{certificado.cerCantidadGenerada}}</td>
+                        <td class="text-center">{{certificado.cerUser.first_name}} {{certificado.cerUser.last_name}}</td>
+                        <td class="text-center py-3" style="color: rgb(40, 66, 101);" ><a onclick="generarCertificado({{certificado.cerEmpleado.id}})" ><i title="Descargar certificado" class="fa-solid fa-download fa-beat-fade fa-xl"></i></a></td>
                       </tr>
                      {% endfor %}
                     </tbody>
                   </table>
+                </div>
             </div>
           </div>
         </div>
     </div>
 
-  <div class="offcanvas offcanvas-start bg-menu border-end border-white" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header pt-1">
-      <h5 class="offcanvas-title text-white" id="offcanvasExampleLabel">Menu</h5>
-      <a class="text-white fs-1" data-bs-dismiss="offcanvas" aria-label="Close"><i class="bi bi-list"></i></a>
-    </div>
-    <div class="offcanvas-body p-0">
-      <div class="accordion accordion-flush" id="accordionFlushExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="flush-headingOne">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                Certificaciones
-              </button>
-            </h2>
-            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-              <div class="accordion-body p-0">
-                <div class="list-group list-group-flush">
-                  <a href="/inicioUsuario/" class="list-group-item  item-menu text-start">Generar certificaciones</a>
-                </div>
-                <div class="list-group list-group-flush">
-                  <a href="/vistaHistorialCertificaciones/" class="list-group-item  item-menu text-start ">Historial</a>
+    <div class="offcanvas offcanvas-start bg-menu border-end border-white" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+      <div class="offcanvas-header pt-1">
+        <h5 class="offcanvas-title text-white" id="offcanvasExampleLabel">Menu</h5>
+        <a class="text-white fs-1" data-bs-dismiss="offcanvas" aria-label="Close"><i class="bi bi-list"></i></a>
+      </div>
+      <div class="offcanvas-body p-0">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  Certificaciones
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body p-0">
+                  <div class="list-group list-group-flush">
+                    <a href="/inicioUsuario/" class="list-group-item  item-menu text-start">Generar certificaciones</a>
+                  </div>
+                  <div class="list-group list-group-flush">
+                    <a href="/vistaHistorialCertificaciones/" class="list-group-item  item-menu text-start ">Historial</a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+      </div>
+      <hr class="m-0 text-white">
+      <div class="dropup mx-3 my-2">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          {% if usuario.userFoto %}
+            <img src="/media/{{usuario.userFoto}}" alt="" width="32" height="32" class="rounded-circle me-2">
+          {% else %}
+            <img src="{% static 'img/usuario.png' %}" alt="" width="32" height="32" class="rounded-circle me-2">
+          {% endif %}
+          <strong>{{usuario.first_name}} {{usuario.last_name}}</strong>
+        </a>
+        <ul class="dropdown-menu bg-menu border border-white text-small shadow">
+          <li><a class="dropdown-item item-menu border-white border-bottom mb-2" href="/vistaActualizarPerfil/">Perfil</a></li>
+          <li><a class="dropdown-item item-menu" href="/cerrarSesion/">Cerrar sesion</a></li>
+        </ul>
+      </div>
     </div>
-    <hr class="m-0 text-white">
-    <div class="dropup mx-3 my-2">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        {% if usuario.userFoto %}
-          <img src="/media/{{usuario.userFoto}}" alt="" width="32" height="32" class="rounded-circle me-2">
-        {% else %}
-          <img src="{% static 'img/usuario.png' %}" alt="" width="32" height="32" class="rounded-circle me-2">
-        {% endif %}
-        <strong>{{usuario.first_name}} {{usuario.last_name}}</strong>
-      </a>
-      <ul class="dropdown-menu bg-menu border border-white text-small shadow">
-        <li><a class="dropdown-item item-menu border-white border-bottom mb-2" href="/vistaActualizarPerfil/">Perfil</a></li>
-        <li><a class="dropdown-item item-menu" href="/cerrarSesion/">Cerrar sesion</a></li>
-      </ul>
-    </div>
-  </div>
  </div>
  <script>
-    new DataTable('#certificaciones');
+  var table = new DataTable('#certificaciones', {
+    language: {
+        url: '//cdn.datatables.net/plug-ins/2.0.3/i18n/es-ES.json',
+    },
+});
  </script>
 </body>
 
