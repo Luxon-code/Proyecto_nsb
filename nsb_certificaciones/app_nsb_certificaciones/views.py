@@ -28,21 +28,44 @@ def vistaInicioUsuario(request):
     
 def vistaInicioAdministrador(request):
     if request.user.is_authenticated:
-        return render(request,'administrador/inicioAdministrador.html')
+        if request.user.is_superuser:  
+            return render(request,'administrador/inicioAdministrador.html',{"usuario":request.user})
+        else:
+            return redirect('/inicioUsuario/')
+    else:
+        return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
     
 def vistaActulizarPefil(request):
     if request.user.is_authenticated:
-        return render(request,'usuario/actualizarPerfil.html',{"usuario":request.user})
+        if request.user.is_superuser:
+            return render(request,'administrador/actualizarPerfil.html',{"usuario":request.user})
+        else:
+            return render(request,'usuario/actualizarPerfil.html',{"usuario":request.user})
     else:
         return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
 
 def vistaHistorialCertificaciones(request):
     if request.user.is_authenticated:
-        return render(request,'usuario/historialDeCertificaciones.html',{"usuario":request.user,
+        if request.user.is_superuser:
+            return render(request,'administrador/historialDeCertificaciones.html',{"usuario":request.user,
+                                                                         "certificaciones":Certificado.objects.all()})
+        else:
+            return render(request,'usuario/historialDeCertificaciones.html',{"usuario":request.user,
                                                                          "certificaciones":Certificado.objects.all()})
     else:
         return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
     
+def vistaAdministrarUsuarios(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+             return render(request,'administrador/administrarUsuarios.html',{"usuario":request.user,
+                                                                             "usuarios":User.objects.all()})
+        else:
+            return redirect('/inicioUsuario/')
+    else:
+        return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
+
+
 #------------------------funciones------------------------#
 def fecha_actual():
     meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
@@ -243,6 +266,22 @@ def obtenerEmpleados(request):
     except Exception as e:
         print("Error: "+e)
         
+def obtenerUsario(request,id):
+    try:
+        user=User.objects.get(pk=id)
+        usuario = {
+            "id": user.id,
+            "cedula":user.userCedula,
+            "nombre":user.first_name,
+            "apellido":user.last_name,
+            "telefono":user.userTelefono,
+            "foto":str(user.userFoto),
+            "correo":user.email
+        }
+        return JsonResponse(usuario)
+    except Exception as e:
+        print("Error: "+e)
+        
 def actualizarPerfil(request,id):
     """
     Modifica los datos de un usuario en su perfil y guarda los cambios en la base de datos.
@@ -288,4 +327,44 @@ def actualizarPerfil(request,id):
             else:
                 mensaje = error
             retorno = {"mensaje":mensaje,"estado":False}
-        return render(request, 'usuario/actualizarPerfil.html',retorno)
+        if request.user.is_superuser:
+            return redirect("/vistaAdministrarUsuarios/")
+        else:
+            return render(request, 'usuario/actualizarPerfil.html',retorno)
+
+def cambiarEstadoUsuario(request,id):
+    """
+    Cambia el estado (activo/inactivo) de un usuario en el sistema y devuelve una respuesta JSON con el resultado.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        id (int): El ID del usuario cuyo estado se desea cambiar.
+
+    Returns:
+        JsonResponse: Una respuesta JSON que indica si el cambio de estado fue exitoso y contiene un mensaje correspondiente.
+    """
+    estado = False
+    try:
+        with transaction.atomic():
+            user = User.objects.get(pk=id)
+            if user.is_superuser:
+                mensaje = "Este usuario no se le puede cambiar el estado, ya que es el superuser del sistema"
+                estado = False
+            else:
+                if user.is_active:
+                    user.is_active = False
+                    mensaje = "Inactivo"
+                else:
+                    user.is_active = True
+                    mensaje = "Activo"
+                user.save()
+                estado = True
+    except Exception as error:
+        transaction.rollback()
+        mensaje = f"{error}"
+    retorno = {
+        'estado': estado,
+        'mensaje':mensaje
+    }
+    
+    return JsonResponse(retorno)

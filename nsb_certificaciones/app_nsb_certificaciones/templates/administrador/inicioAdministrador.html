@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NSB certificaciones</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Latest compiled JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://kit.fontawesome.com/6c50fc0e6c.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js" 
     integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" 
@@ -22,29 +22,314 @@
 <link rel="stylesheet" href="{% static 'css/input.css' %}">
 <link rel="stylesheet" href="{% static 'css/checkbox.css' %}">
 <link rel="stylesheet" href="{% static 'css/button.css' %}">
-<link rel="stylesheet" href="{% static 'css/border.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/select.css' %}">
+<link rel="stylesheet" href="{% static 'css/search-input.css' %}">
+<link rel="stylesheet" href="{% static 'css/toastr.min.css' %}">
+<script src="{% static 'js/toastr.min.js'%}"></script>
 <script src="{% static 'js/loader.js'%}"></script>
+<script src="{% static 'js/buscador.js'%}"></script>
+<script src="{% static 'js/navar.js'%}"></script>
 </head>
 
 <body>
+  <div class="container-fluid">
+    <!--Nav horizontal-->
+    <div class="row border-bottom border-white sticky-top">
+      <nav class="navbar navbar-expand-lg p-0" style="backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.1);">
+        <div class="container-fluid">
+          <div class="d-flex align-items-center">
+            <a class="fs-1 text-white" data-bs-toggle="offcanvas" href="#offcanvasExample" aria-controls="offcanvasExample"><i class="bi bi-list"></i></a>
+            <div class="position-relative">
+              <div class="input-wrapper">
+                <button class="icon">
+                  <svg
+                    width="25px"
+                    height="25px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
+                      stroke="#fff"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                    <path
+                      d="M22 22L20 20"
+                      stroke="#fff"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </svg>
+                </button>
+                <input onkeyup="autoComplet()" type="text" name="text" id="txtBuscar" class="input" placeholder="Buscar Empleado.." />
+              </div>    
+              <div id="listProyectos" class="position-absolute w-100 z-1"></div>
+            </div>        
+          </div>
+          <div class="d-flex align-items-center">
+            <h2 class="mt-1 text-white">NSB</h2>
+            {% load static %}
+            <img src="{% static 'img/certificado.png'%}" alt="" style="width: 4rem;">
+          </div>
+        </div>
+      </nav>
+    </div>
+
     <div id="loader">
       <div class="blur-background"></div>
         <div class="loader-container">
              <span class="loader"></span>
         </div>
     </div>
-  <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-12">
-          <div class="d-flex justify-content-center align-items-center h-100" style="margin-top:2rem; margin-bottom:2rem;">
-            <div class="sombra-login border border-primary bg-white  p-5 rounded-5 text-secondary bg-opacity-75" style="width: 25rem;  position: relative;">
-                <h2 class="text-center my-3">Inicio Administrador</h2>
+      <div class="col-sm-12">
+        <div class="d-flex justify-content-center align-items-center h-100" style="margin-top:0.7rem; margin-bottom: 0.7rem;">
+          <div class="sombra-login border border-primary bg-white  p-5 rounded-5 text-secondary bg-opacity-75" style="width: 75%;  position: relative;">
+            {% load static %}
+            <div class="d-flex justify-content-start">
+                <img src="{% static 'img/certificado.png'%}" alt="" style="position: absolute; top: -1.5rem; left: -2.5rem; height: 6rem; transform: rotate(-10deg);">
             </div>
+            <form action="/registrarUsuario/" enctype="multipart/form-data" method="post" id="formRegistro">
+              {% csrf_token %}
+              <div class="row">
+                 <h3 class="text-center">Generar Certificado</h3>
+              </div>
+              <div class="row d-flex align-items-center">
+                <div class="col-md-6 mb-3">
+                  <div class="mt-3 col-lg-12">
+                        <div class="form__group field">
+                          <input class="form__field" type="text" placeholder="Nombre Completo" name="txtNombre" id="txtNombre" style="text-transform: capitalize;" required>
+                          <label for="name" class="form__label"> 
+                              <i class="fa-solid fa-signature fa-fade" style="font-size: 1.5rem;"></i>
+                              Nombre Completo
+                          </label>
+                        </div>
+                  </div>
+                  <div class="mt-3 col-lg-12">
+                    <div class="form__group field">
+                        <input class="form__field" type="number" placeholder="Numero de Cedula" name="txtCedula" id="txtCedula" required>
+                        <label for="name" class="form__label">
+                            <i class="fa-solid fa-address-card fa-fade" style="font-size: 1.5rem;"></i>
+                            Numero de Cedula
+                        </label>
+                    </div>
+                  </div>
+                  <div class="mt-3 col-lg-12">
+                    <select class="select" name="cbCargo" id="cbCargo" required>
+                      <option value="">Seleccione un cargo</option>
+                      {% for cargo in cargos  %}
+                        <option value="{{cargo.0}}">{{cargo.0}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="mt-3 col-lg-12">
+                    <h5>Agregar fechas</h5>
+                  </div>
+                  <div class="mt-3 col-lg-12">
+                    <div class="form__group field">
+                        <input class="form__field" type="date" placeholder="Usuario" onchange="actualizarFechaMinima()" name="txtFechaInicio" id="txtFechaInicio" required>
+                        <label for="name" class="form__label"> 
+                            <i class="fa-solid fa-calendar-days fa-fade" style="font-size: 1.5rem;"></i>
+                            Fecha de Inicio
+                        </label>
+                    </div>
+                  </div>
+                  <div class="mt-3 col-lg-12">
+                    <div class="form__group field">
+                        <input class="form__field" type="date" placeholder="Usuario" name="txtFechaFinal" id="txtFechaFinal" required>
+                        <label for="name" class="form__label"> 
+                            <i class="fa-solid fa-calendar-days fa-fade" style="font-size: 1.5rem;"></i>
+                            Fecha de terminacion 
+                        </label>
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="mb-2 col-lg-6">
+                      <button class="button" onclick="guardarFechas()" type="button"> <span>Agregar <i class="fa-solid fa-plus fa-beat"></i></span>
+                      </button>
+                    </div>
+                    <div class="mb-2 col-lg-6">
+                      <button class="button" onclick="borrarFecha()" type="button"> <span>Eliminar <i class="fa-solid fa-trash fa-beat"></i></i></span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row d-flex justify-content-center" id="block_impiar">
+                    
+                  </div>
+                </div>
+                <div class="col-md-6 bg-white text-black border border-dark-subtle" style="font-family: Arial;">
+                  <div class="row d-flex align-items-center">
+                    <div class="col-3 p-0 h-50">
+                      <div class="d-flex justify-content-center">
+                          <img src="{% static 'img/nsb_logo.jpg'%}" alt="Avatar" style="max-width: 4rem; max-height: 4rem; opacity: 0.5;">
+                      </div>
+                    </div>
+                    <div class="col-9 text-black p-2">
+                      <p class="my-0" style="font-size: small; text-align: center; font-weight:500;opacity: 0.5;">CORPORACIÓN NUTRICIÓN SALUD Y BIENESTAR NSB DE COLOMBIA   
+                      </p>
+                      <p class="m-0" style="font-size: xx-small; text-align: center;opacity: 0.5;">NIT 900.407.911-8</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <p class="m-0" style="font-size: medium;text-align: center;">LA SUSCRITA REPRESENTANTE LEGAL</p>
+                  </div>
+                  <div class="row">
+                    <p class="my-3" style="font-size: medium;text-align: center;">CERTIFICA QUE</p>
+                  </div>
+                  <div class="row">
+                    <p class="mt-3 px-4 placeholder-glow" style="font-size: small;text-align: justify;">
+                      <span class="placeholder col-6 placeholder-sm" id="nombreCompleto" style="text-transform: uppercase; font-weight: 600;"></span> 
+                      Identificado/a con cedula de ciudadanía número <span class="placeholder col-3 placeholder-sm" style="font-weight: 600;" id="cedula"></span>,
+                      quien labora para la Corporación mediante contrato de Trabajo a Término Fijo, 
+                      inferior a un año relacionado a continuación:</p>
+                  </div>
+                  <div class="row d-flez justify-content-center">
+                    <table class="w-75 text-center table-bordered border-black">
+                      <thead>
+                        <tr>
+                          <th colspan="3">CONTRATO</th>
+                        </tr>
+                      </thead>
+                      <tbody class="placeholder-glow" style="font-size: small;" id="tablaFechas">
+                        <tr>
+                          <td class="col-6">FECHA DE INICIO</td>
+                          <td class="col-6">FECHA DE TERMINACIÓN</td>
+                        </tr>
+                        <tr>
+                          <td><span class="placeholder col-10 placeholder-sm"></span> </td>
+                          <td><span class="placeholder col-10 placeholder-sm"></span> </td>
+                        </tr>
+                        <tr>
+                          <td><span class="placeholder col-10 placeholder-sm"></span> </td>
+                          <td><span class="placeholder col-10 placeholder-sm"></span> </td>
+                        </tr>
+                        <tr>
+                          <td><span class="placeholder col-10 placeholder-sm"></span> </td>
+                          <td><span class="placeholder col-10 placeholder-sm"></span> </td>
+                        </tr>
+                        <tr>
+                          <td><span class="placeholder col-10 placeholder-sm"></span> </td>
+                          <td><span class="placeholder col-10 placeholder-sm"></span> </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="row">
+                    <p class="mt-3 px-4 placeholder-glow" style="font-size: small;text-align: justify;">
+                      Desempeñándose en el cargo de: <span class="placeholder col-3 placeholder-sm" style="text-transform: uppercase; font-weight: 600;" id="cargo"></span>, 
+                      en el desarrollo de los Contratos de Aporte mencionados, 
+                      cuyo objeto es “Atender integralmente a la primera infancia De Cero a Siempre”, 
+                      de conformidad con las directrices, 
+                      lineamientos y estándares establecidos por el ICBF.
+                    </p>
+                  </div>
+                  <div class="row">
+                    <p class="px-4" style="font-size: small;text-align: justify;">
+                      {{fechaActual}}
+                    </p>
+                  </div>
+                  <div class="row">
+                    <p class="px-4" style="font-size: small;text-align: justify;">
+                      Atentamente,
+                    </p>
+                  </div>
+                  <div class="row" style="font-size: small;text-align: start;">
+                    <div class="col-4">
+                      <img src="{% static 'img/firma_representante_legal.jpg'%}" alt="Avatar" style="height: 4rem; max-width: 10rem;">
+                    </div>
+                    <p class="m-0 px-4" style="font-weight: 600;">
+                      MARÍA NAYIBE FERIZ DE VEGA  
+                    </p>
+                    <span class="px-4">Representante Legal.</span>
+                  </div>
+                  <div class="row d-flex align-items-center">
+                    <div class="col-12 text-black p-2">
+                      <p class="my-0" style="font-size: xx-small; text-align: center;opacity: 0.5;">
+                        CALLE  4 No. 10-11 Barrio Altico  Neiva – Huila     
+                      </p>
+                      <p class="m-0" style="font-size: xx-small; text-align: center;opacity: 0.5;">
+                        Teléfono 8641144 / 3208033640
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-4">
+                <button type="button" onclick="generarCertificado()" class="button"> <span>Generar Certificado</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+      </div>
+  </div>
+
+  <!--nav vertical-->
+    
+    <div class="offcanvas offcanvas-start bg-menu border-end border-white" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+      <div class="offcanvas-header pt-1">
+        <h5 class="offcanvas-title text-white" id="offcanvasExampleLabel">Menu</h5>
+        <a class="text-white fs-1" data-bs-dismiss="offcanvas" aria-label="Close"><i class="bi bi-list"></i></a>
+      </div>
+      <div class="offcanvas-body p-0">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  Certificaciones
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body p-0">
+                  <div class="list-group list-group-flush">
+                    <a href="/inicioAdministrador/" class="list-group-item  item-menu text-start">Generar certificaciones</a>
+                  </div>
+                  <div class="list-group list-group-flush">
+                    <a href="/vistaHistorialCertificaciones/" class="list-group-item  item-menu text-start ">Historial</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  Usuarios
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body p-0">
+                  <div class="list-group list-group-flush">
+                    <a href="/vistaAdministrarUsuarios/" class="list-group-item  item-menu text-start">Administrar usuarios</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <hr class="m-0 text-white">
+      <div class="dropup mx-3 my-2">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          {% if usuario.userFoto %}
+            <img src="/media/{{usuario.userFoto}}" alt="" width="32" height="32" class="rounded-circle me-2">
+          {% else %}
+            <img src="{% static 'img/usuario.png' %}" alt="" width="32" height="32" class="rounded-circle me-2">
+          {% endif %}
+          <strong>{{usuario.first_name}} {{usuario.last_name}}</strong>
+        </a>
+        <ul class="dropdown-menu bg-menu border border-white text-small shadow">
+          <li><a class="dropdown-item item-menu border-white border-bottom mb-2" href="/vistaActualizarPerfil/">Perfil</a></li>
+          <li><a class="dropdown-item item-menu" href="/cerrarSesion/">Cerrar sesion</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </body>
-
+{% load static%}
+<script src="{% static 'js/inicioUsuario.js' %}"></script>
 </html>
