@@ -301,6 +301,7 @@ def actualizarPerfil(request,id):
             correo = request.POST["txtCorreo"]
             telefono = request.POST["txtTelefono"]
             foto = request.FILES.get("fileFoto", False)
+            bandera = request.POST.get("bandera",False)
             with transaction.atomic():
                 user = User.objects.get(pk=id)
                 user.username=correo
@@ -328,7 +329,10 @@ def actualizarPerfil(request,id):
                 mensaje = error
             retorno = {"mensaje":mensaje,"estado":False}
         if request.user.is_superuser:
-            return redirect("/vistaAdministrarUsuarios/")
+            if bandera != False:
+                return redirect("/vistaAdministrarUsuarios/")
+            else:
+                return render(request, 'administrador/actualizarPerfil.html',retorno)
         else:
             return render(request, 'usuario/actualizarPerfil.html',retorno)
 
