@@ -28,9 +28,10 @@ class User(AbstractUser):
     
 class Empleado(models.Model):
     empNombre = models.CharField(max_length=100, db_comment="Nombre del empleado")
-    empCedula = models.CharField(max_length=20,unique=True,db_comment="Numero de cedula del empleado")
+    empCedula = models.CharField(max_length=20,db_comment="Numero de cedula del empleado")
     empCargo = models.CharField(max_length=100, db_comment="Cargo del empleado")
     empFechas = models.TextField(db_comment="Fechas asociadas al empleado")
+    empTipoContrato = models.CharField(max_length=100,default="Término Fijo",db_comment="Tipo de contrato del empleado")
     empFechaHoraCreacion = models.DateTimeField(auto_now_add=True, db_comment="Fecha y hora del registro")
     empFechaHoraActualizacion = models.DateTimeField(auto_now=True, db_comment="Fecha y hora última actualización")
 

@@ -149,6 +149,8 @@ function generarCertificado(){
             data.append('fechas',JSON.stringify(fechas))
             data.append('existeEmpleado',existeEmpleado)
             data.append('idEmpleado',idEmpleado)
+            data.append('tipoContrato',document.querySelector('input[name="tipoContrato"]:checked').value)
+            data.append('Firma',document.querySelector('input[name="Firma"]:checked').value)
             var options = {
                 method: "POST",
                 body:data,
@@ -234,15 +236,19 @@ function empleadoSeleccionado(element) {
     txtNombre.value = element.empNombre
     txtCedula.value = element.empCedula
     cbCargo.value = element.empCargo
+    if(TerminoFijo.value==element.empTipoContrato){
+        TerminoFijo.checked = true
+    }else{
+        PrestacionServicio.checked = true
+    }
+    radioButton()
     $('#nombreCompleto').removeClass()
     $('#nombreCompleto').text(element.empNombre)
     $('#cedula').removeClass()
     $('#cedula').text(element.empCedula)
     $('#cargo').removeClass()
     $('#cargo').text(element.empCargo)
-    txtNombre.disabled = true
     txtCedula.disabled = true
-    cbCargo.disabled = true
     fechaMinima()
     block_impiar.innerHTML = `<div class="col-lg-10">
     <button class="button" onclick="limpiarFormulario()" type="button"> <span>limpiar formalario <i class="fa-solid fa-eraser fa-beat"></i></span>
@@ -264,9 +270,18 @@ function limpiarFormulario(){
     $('#cedula').text('')
     $('#cargo').addClass('placeholder col-3 placeholder-sm')
     $('#cargo').text('')
-    txtNombre.disabled = false
     txtCedula.disabled = false
-    cbCargo.disabled = false
     fechaMinima()
     block_impiar.innerHTML = ``
+    cbxFirma.checked = true
+    TerminoFijo.checked = true
+}
+
+function radioButton(){
+    let elementoActivo = document.querySelector('input[name="tipoContrato"]:checked');
+    if(elementoActivo) {
+        tipoContrato.innerHTML = elementoActivo.value;
+    } else {
+        alert('No hay ninún elemento activo');
+    }
 }

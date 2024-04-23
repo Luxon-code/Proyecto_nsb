@@ -16,7 +16,7 @@ class CertificadoPdf(FPDF):
     def header(self):
         with self.local_context(fill_opacity=0.5):
             # Logo
-            self.image('media/nsb_logo.jpg', 10, 8, 20)
+            self.image('media/nsb_logo.png', 10, 8, 20)
             # Arial bold 13
             self.set_font('Arial', 'B', 13)
             # Move to the right
@@ -40,7 +40,7 @@ class CertificadoPdf(FPDF):
             self.set_font('Arial', '', 6)
             self.cell(0, 10, "Teléfono 8641144 / 3208033640", 0, 0, 'C')
         
-    def mostrarDatos(self,empleado:Empleado):
+    def mostrarDatos(self,empleado:Empleado,firma:str):
         self.set_font('Arial', 'B', 14)
         self.cell(0, 10, "LA SUSCRITA REPRESENTANTE LEGAL", 0, 0, 'C')
         self.ln(15)
@@ -49,7 +49,7 @@ class CertificadoPdf(FPDF):
         self.set_font('Arial','',12)
         text = (f"**{empleado.empNombre.upper()}** Identificado/a con cedula de ciudadanía número "
         f"**{empleado.empCedula}**, quien viene laborando para la Corporación mediante "
-        f"contrato de Trabajo a Término Fijo, inferior a un año relacionado a continuación:")
+        f"contrato de Trabajo a {empleado.empTipoContrato}, inferior a un año relacionado a continuación:")
         self.multi_cell(0,10,text,markdown=True,align="J",max_line_height=5,padding=5)
         self.ln(0.2)
         #tabla
@@ -80,8 +80,11 @@ class CertificadoPdf(FPDF):
         self.ln(0.2)
         self.cell(5)
         self.cell(0,10,"Atentamente,",0,1,align="L")
-        self.image('media/firma_representante_legal.jpg',x='L',w=80)
+        if firma == "True":
+            self.image('media/firma_representante_legal.jpg',x='L',w=80)
         self.set_font('Arial','B',12)
+        if firma != "True":
+            self.ln(15)
         self.cell(5)
         self.cell(0,10,"MARÍA NAYIBE FERIZ DE VEGA",0,0,align="L")
         self.ln(4)

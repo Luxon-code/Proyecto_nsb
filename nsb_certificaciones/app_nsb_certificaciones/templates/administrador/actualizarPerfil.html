@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   {% load static%}
-  <link rel="icon" href="{% static 'img/certificado.png' %}">
+  <link rel="icon" href="{% static 'img/nsb_logo.png' %}">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NSB certificaciones</title>
@@ -49,7 +49,7 @@
             <div class="d-flex align-items-center">
               <h2 class="mt-1 text-white">NSB</h2>
               {% load static %}
-              <img src="{% static 'img/certificado.png'%}" alt="" style="width: 4rem;">
+              <img src="{% static 'img/nsb_logo.png'%}" alt="" style="width: 4rem;">
             </div>
           </div>
         </nav>
@@ -68,7 +68,7 @@
             <div class="sombra-login border border-primary bg-white  p-5 rounded-5 text-secondary bg-opacity-75" style="width: 75%;  position: relative;">
               {% load static %}
               <div class="d-flex justify-content-start">
-                  <img src="{% static 'img/certificado.png'%}" alt="" style="position: absolute; top: -1.5rem; left: -2.5rem; height: 6rem; transform: rotate(-10deg);">
+                  <img src="{% static 'img/nsb_logo.png'%}" alt="" style="position: absolute; top: -1.5rem; left: -2.5rem; height: 6rem;">
               </div>
               <form action="/actualizarPerfil/{{usuario.id}}" enctype="multipart/form-data" method="post" id="formRegistro">
                 {% csrf_token %}
@@ -179,6 +179,9 @@
             </h2>
             <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
               <div class="accordion-body p-0">
+                <div class="list-group list-group-flush">
+                  <a href="/vistaregistrarUsuario/" class="list-group-item  item-menu text-start">Registrar Usuario</a>
+                </div>
                 <div class="list-group list-group-flush">
                   <a href="/vistaAdministrarUsuarios/" class="list-group-item  item-menu text-start">Administrar usuarios</a>
                 </div>

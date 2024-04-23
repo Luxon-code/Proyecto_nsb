@@ -18,7 +18,13 @@ def vistaLogin(request):
 
 
 def vistaRegistroUsario(request):
-    return render(request,'registrodeusuario.html')
+    if request.user.is_authenticated:
+        if request.user.is_superuser:  
+            return render(request,'administrador/registrodeusuario.html',{"usuario":request.user})
+        else:
+            return redirect('/inicioUsuario/')
+    else:
+        return render(request,'login.html',{"mensaje":"Debe iniciar sesion para acceder a esta pagina"})
 
 def vistaInicioUsuario(request):
     if request.user.is_authenticated:
@@ -29,7 +35,7 @@ def vistaInicioUsuario(request):
 def vistaInicioAdministrador(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:  
-            return render(request,'administrador/inicioAdministrador.html',{"usuario":request.user})
+            return render(request,'administrador/inicioAdministrador.html',{"usuario":request.user,"cargos":cargoEmpleado,"fechaActual":fecha_actual()})
         else:
             return redirect('/inicioUsuario/')
     else:
@@ -117,7 +123,7 @@ def registrarUsuario(request):
                 "cedula" : cedula,"nombres" : nombres,"apellidos" : apellidos,
                 "correo" : correo,"telefono" : telefono
                 }
-    return render(request, "registrodeusuario.html",retorno)
+    return render(request, "administrador/registrodeusuario.html",retorno)
 
 def iniciarSesion(request):
     """
@@ -185,6 +191,8 @@ def generarCertificado(request):
                 cedula = request.POST.get('cedula',False)
                 cargo = request.POST.get('cargo',False)
                 fechas =request.POST.get('fechas',False)
+                tipoContrato = request.POST.get('tipoContrato',False)
+                Firma = request.POST.get('Firma',False)
                 existeEmpleado = request.POST.get('existeEmpleado')
                 idEmpleado = request.POST.get('idEmpleado')
                 if existeEmpleado=="true" and nombreCompleto==False:
@@ -199,23 +207,27 @@ def generarCertificado(request):
                 elif existeEmpleado=="true":
                     empleado = Empleado.objects.get(pk=idEmpleado)
                     empleado.empFechas = fechas
+                    empleado.empCargo=cargo
+                    empleado.empNombre = nombreCompleto
+                    empleado.empTipoContrato = tipoContrato
                     empleado.save()
                     certificado = Certificado.objects.filter(cerEmpleado=empleado).get()
                     certificado.cerCantidadGenerada += 1
                     certificado.cerUser = request.user
+                    certificado.cerNombre = f"{cedula}_{nombreCompleto}"
                     certificado.save() 
-                    url = pdfCertificado(empleado,certificado)
+                    url = pdfCertificado(empleado,certificado,Firma)
                     nombreDelArchivo=certificado.cerNombre
                     mensaje="Certificado Generado"
                     estado=True
                 else:
                     empleado = Empleado(empNombre=nombreCompleto,empCedula=cedula,empCargo=cargo,
-                                        empFechas=fechas)
+                                        empFechas=fechas,empTipoContrato=tipoContrato)
                     empleado.save()
                     certificado = Certificado(cerNombre=f"{cedula}_{nombreCompleto}",cerEmpleado=empleado,
                                             cerUser=request.user,cerCantidadGenerada=1)
                     certificado.save()
-                    url = pdfCertificado(empleado,certificado)
+                    url = pdfCertificado(empleado,certificado,Firma)
                     nombreDelArchivo=certificado.cerNombre
                     mensaje="Certificado Generado"
                     estado=True
@@ -228,14 +240,14 @@ def generarCertificado(request):
             retorno = {"estado": estado, "mensaje": mensaje}
         return JsonResponse(retorno)
     
-def pdfCertificado(empleado: Empleado, certificado: Certificado):
+def pdfCertificado(empleado: Empleado, certificado: Certificado,firma:str=None):
     eliminar_archivos_pdf()
     from app_nsb_certificaciones.certificadoPdf import CertificadoPdf
     pdf = CertificadoPdf()
     
     pdf.add_page()
     
-    pdf.mostrarDatos(empleado)
+    pdf.mostrarDatos(empleado,firma)
     
     pdf_output_path = f'media/{certificado.cerNombre}.pdf'
     pdf.output(pdf_output_path, 'F')

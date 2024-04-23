@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   {% load static%}
-  <link rel="icon" href="{% static 'img/certificado.png' %}">
+  <link rel="icon" href="{% static 'img/nsb_logo.png' %}">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NSB certificaciones</title>
@@ -75,7 +75,7 @@
           <div class="d-flex align-items-center">
             <h2 class="mt-1 text-white">NSB</h2>
             {% load static %}
-            <img src="{% static 'img/certificado.png'%}" alt="" style="width: 4rem;">
+            <img src="{% static 'img/nsb_logo.png'%}" alt="" style="width: 4rem;">
           </div>
         </div>
       </nav>
@@ -93,9 +93,9 @@
           <div class="sombra-login border border-primary bg-white  p-5 rounded-5 text-secondary bg-opacity-75" style="width: 75%;  position: relative;">
             {% load static %}
             <div class="d-flex justify-content-start">
-                <img src="{% static 'img/certificado.png'%}" alt="" style="position: absolute; top: -1.5rem; left: -2.5rem; height: 6rem; transform: rotate(-10deg);">
+                <img src="{% static 'img/nsb_logo.png'%}" alt="" style="position: absolute; top: -1.5rem; left: -2.5rem; height: 6rem;">
             </div>
-            <form action="/registrarUsuario/" enctype="multipart/form-data" method="post" id="formRegistro">
+            <form action="" enctype="multipart/form-data" method="post" id="formRegistro">
               {% csrf_token %}
               <div class="row">
                  <h3 class="text-center">Generar Certificado</h3>
@@ -129,6 +129,51 @@
                     </select>
                   </div>
                   <div class="mt-3 col-lg-12">
+                    <h5>Tipo de contrato</h5>
+                  </div>
+                  <div class="mt-3 col-lg-12">
+                      <fieldset>
+                        <div class="checkbox-wrapper-33">
+                          <label class="checkbox">
+                            <input class="checkbox__trigger visuallyhidden" name="tipoContrato" onclick="radioButton()" id="TerminoFijo" value="Término Fijo" type="radio" checked />
+                            <span class="checkbox__symbol">
+                              <svg
+                                aria-hidden="true"
+                                class="icon-checkbox"
+                                width="28px"
+                                height="28px"
+                                viewBox="0 0 28 28"
+                                version="1"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M4 14l8 7L24 7"></path>
+                              </svg>
+                            </span>
+                            <p class="checkbox__textwrapper" id="label-checkbox">Término Fijo</p>
+                          </label>
+                        </div>
+                        <div class="checkbox-wrapper-33">
+                          <label class="checkbox">
+                            <input class="checkbox__trigger visuallyhidden" name="tipoContrato" onclick="radioButton()" id="PrestacionServicio" value="Prestacion de servicio" type="radio" />
+                            <span class="checkbox__symbol">
+                              <svg
+                                aria-hidden="true"
+                                class="icon-checkbox"
+                                width="28px"
+                                height="28px"
+                                viewBox="0 0 28 28"
+                                version="1"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M4 14l8 7L24 7"></path>
+                              </svg>
+                            </span>
+                            <p class="checkbox__textwrapper" id="label-checkbox">Prestacion de servicio</p>
+                          </label>
+                        </div> 
+                      </fieldset>          
+                  </div>
+                  <div class="mt-3 col-lg-12">
                     <h5>Agregar fechas</h5>
                   </div>
                   <div class="mt-3 col-lg-12">
@@ -159,7 +204,52 @@
                       </button>
                     </div>
                   </div>
-                  <div class="row d-flex justify-content-center" id="block_impiar">
+                  <div class="mt-3 col-lg-12">
+                    <h5>Generar certificado:</h5>
+                  </div>
+                  <div class="mt-3 col-lg12">
+                    <fieldset>
+                      <div class="checkbox-wrapper-33">
+                        <label class="checkbox">
+                          <input class="checkbox__trigger visuallyhidden" name="Firma" value="True" type="radio" />
+                          <span class="checkbox__symbol">
+                            <svg
+                              aria-hidden="true"
+                              class="icon-checkbox"
+                              width="28px"
+                              height="28px"
+                              viewBox="0 0 28 28"
+                              version="1"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="M4 14l8 7L24 7"></path>
+                            </svg>
+                          </span>
+                          <p class="checkbox__textwrapper" id="label-checkbox">Firmado</p>
+                        </label>
+                      </div>
+                      <div class="checkbox-wrapper-33">
+                        <label class="checkbox">
+                          <input class="checkbox__trigger visuallyhidden" name="Firma" id="cbxFirma" value="False" type="radio" checked />
+                          <span class="checkbox__symbol">
+                            <svg
+                              aria-hidden="true"
+                              class="icon-checkbox"
+                              width="28px"
+                              height="28px"
+                              viewBox="0 0 28 28"
+                              version="1"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="M4 14l8 7L24 7"></path>
+                            </svg>
+                          </span>
+                          <p class="checkbox__textwrapper" id="label-checkbox">Sin firmar</p>
+                        </label>
+                      </div> 
+                    </fieldset>     
+                  </div>
+                  <div class="pt-2 row d-flex justify-content-center" id="block_impiar">
                     
                   </div>
                 </div>
@@ -167,7 +257,7 @@
                   <div class="row d-flex align-items-center">
                     <div class="col-3 p-0 h-50">
                       <div class="d-flex justify-content-center">
-                          <img src="{% static 'img/nsb_logo.jpg'%}" alt="Avatar" style="max-width: 4rem; max-height: 4rem; opacity: 0.5;">
+                          <img src="{% static 'img/nsb_logo.png'%}" alt="Avatar" style="max-width: 4rem; max-height: 4rem; opacity: 0.5;">
                       </div>
                     </div>
                     <div class="col-9 text-black p-2">
@@ -186,7 +276,7 @@
                     <p class="mt-3 px-4 placeholder-glow" style="font-size: small;text-align: justify;">
                       <span class="placeholder col-6 placeholder-sm" id="nombreCompleto" style="text-transform: uppercase; font-weight: 600;"></span> 
                       Identificado/a con cedula de ciudadanía número <span class="placeholder col-3 placeholder-sm" style="font-weight: 600;" id="cedula"></span>,
-                      quien labora para la Corporación mediante contrato de Trabajo a Término Fijo, 
+                      quien labora para la Corporación mediante contrato de Trabajo a <span id="tipoContrato">Término Fijo</span>,
                       inferior a un año relacionado a continuación:</p>
                   </div>
                   <div class="row d-flez justify-content-center">
@@ -240,10 +330,10 @@
                     </p>
                   </div>
                   <div class="row" style="font-size: small;text-align: start;">
-                    <div class="col-4">
+                    {% comment %} <div class="col-4">
                       <img src="{% static 'img/firma_representante_legal.jpg'%}" alt="Avatar" style="height: 4rem; max-width: 10rem;">
-                    </div>
-                    <p class="m-0 px-4" style="font-weight: 600;">
+                    </div> {% endcomment %}
+                    <p class="m-0 pt-4 px-4" style="font-weight: 600;">
                       MARÍA NAYIBE FERIZ DE VEGA  
                     </p>
                     <span class="px-4">Representante Legal.</span>
@@ -304,6 +394,9 @@
               </h2>
               <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body p-0">
+                  <div class="list-group list-group-flush">
+                    <a href="/vistaregistrarUsuario/" class="list-group-item  item-menu text-start">Registrar Usuario</a>
+                  </div>
                   <div class="list-group list-group-flush">
                     <a href="/vistaAdministrarUsuarios/" class="list-group-item  item-menu text-start">Administrar usuarios</a>
                   </div>

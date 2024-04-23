@@ -49,3 +49,9 @@
   transform: translate3d(100%, 0, 0);
  }
  
+@media only screen and (max-width: 600px) {
+  .button {
+    font-size: 0.8em; /* Reducir el tamaño de la fuente */
+    padding: 0.3rem; /* Reducir el padding */
+  }
+}

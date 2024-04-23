@@ -9,7 +9,7 @@ function autoComplet(){
                     const filtro = data.empleados.filter(filtrar)
                     if(filtro.length>0){
                         filtro.forEach(element => {
-                            lista += `<a onClick='empleadoSeleccionado(${JSON.stringify(element)})' class="list-group-item list-group-item-action text-start">${element.empCedula} - ${capitalize(element.empNombre)}</a>`;
+                            lista += `<a onClick='empleadoSeleccionado(${JSON.stringify(element)})' class="list-group-item list-group-item-action text-start">${element.empCedula} - ${capitalize(element.empNombre)} - ${element.empCargo}</a>`;
                         });
                         lista += `</div>`
                         document.getElementById("listProyectos").innerHTML = lista

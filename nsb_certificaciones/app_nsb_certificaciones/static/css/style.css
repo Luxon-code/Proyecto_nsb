@@ -14,7 +14,7 @@ a{
     color: white;
     text-decoration: none;
     /* "to left" / "to right" - affects initial color */
-    background: linear-gradient(to left, #4878a8 50%, #7da9d4 50%) right;
+    background-image: linear-gradient(to right bottom, #0ee02b, #45e64b, #63ec64, #7bf27b, #91f891);
     background-size: 200%;
     transition: .5s ease-out;
 }
@@ -50,7 +50,7 @@ a{
     --bs-accordion-btn-focus-box-shadow: none;
     --bs-accordion-body-padding-x: 1.25rem;
     --bs-accordion-body-padding-y: 1rem;
-    --bs-accordion-active-color: #7da9d4;
+    --bs-accordion-active-color: #284265;
     --bs-accordion-active-bg: none; 
 }
 .dropdown-menu {
